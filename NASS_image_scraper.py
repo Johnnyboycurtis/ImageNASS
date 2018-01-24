@@ -1,20 +1,17 @@
-# -*- coding: utf-8 -*-
 """
 Created on Wed Jan 17 13:59:55 2018
 
-@author: jn107154
+@author: Jonathan Navarrete
 """
-
-
 import os
-os.chdir(r"C:\Users\jn107154\Documents\Projects\APD\CIRENData\Web Scraping")
-#import urllib
 import requests
 from bs4 import BeautifulSoup
 from tqdm import tqdm
 
 
 #CaseIDs = [149006673, 149006651, 149006672, 149006692, 149006693] ## for testing
+
+print(f"writing files in {os.getcwd()}")
 
 
 with open("CaseID_sample.csv", "r") as myfile:
@@ -56,13 +53,6 @@ with requests.Session() as sesh:
             with open(image_name, "wb+") as myfile:
                 myfile.write(pull_image.content)
             
-
-    
-    
-    
-        
-    
-        
 
 
 """
