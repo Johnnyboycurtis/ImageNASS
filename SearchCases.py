@@ -3,10 +3,9 @@ from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup
 
 
-CHROMEDRIVER = "C:/Users/jn107154/chromedriver.exe"
+CHROMEDRIVER = "./chromedriver"
 
-browser = webdriver.Chrome()
-browser.get(CRHOMEDRIVER)
+browser = webdriver.Chrome(CHROMEDRIVER)
 
 browser.get('https://www-nass.nhtsa.dot.gov/nass/cds/SearchForm.aspx')
 
