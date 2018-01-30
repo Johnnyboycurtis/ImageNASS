@@ -2,9 +2,14 @@ import selenium
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup
+from sys import platform
+import os
 
-
-CHROMEDRIVER = "./chromedriver"
+if platform == "linux":
+    CHROMEDRIVER = "./chromedriver"
+else:
+    CHROMEDRIVER = os.environ.get('CHROMEDRIVER', None)
+    print("Missing Chrome Driver")
 
 browser = webdriver.Chrome(CHROMEDRIVER)
 
@@ -27,7 +32,7 @@ elem.send_keys(Keys.RETURN)
 
 
 
-
+"""
 html = browser.page_source
 
 soup = BeautifulSoup(html)
@@ -66,6 +71,26 @@ for i,x in enumerate(tr_tags):
     print(i, x['href'])
     print(i,x.text)
     break
+"""
+
+while True:
+    html = browser.page_source
+    soup = BeautifulSoup(html)
+    for tag in soup.find_all('title'):
+        print(tag.text)
+    lcasecount = soup.find('span', id = 'lCaseCount')
+    xtable, = soup.find_all('table', id = 'ListTable')
+    tr_tags = xtable.find_all('a', href = True)
+    print(lcasecount.text)
+    for i,x in enumerate(tr_tags):
+        print(i, x)
+        #print(i, x['href'])
+        break
+    try:
+        next_page = browser.find_element_by_id("lNext")
+        next_page.click()
+    except selenium.common.exceptions.NoSuchElementException:
+        break
 
 
 
