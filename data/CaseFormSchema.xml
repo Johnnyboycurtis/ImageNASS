@@ -1,0 +1,2945 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SCI Case Schema 2010 built on 08/11/2011 --><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <xsd:element name="Case">
+      <xsd:complexType>
+         <xsd:all>
+            <xsd:element minOccurs="0" ref="CaseForm"/>
+            <xsd:element minOccurs="1" ref="SciCaseForm"/>
+            <xsd:element minOccurs="0" ref="GeneralVehicleForms"/>
+            <xsd:element minOccurs="0" ref="VehicleExteriorForms"/>
+            <xsd:element minOccurs="0" ref="VehicleInteriorForms"/>
+            <xsd:element minOccurs="0" ref="SafetyForms"/>
+            <xsd:element minOccurs="0" ref="OccupantForms"/>
+            <xsd:element minOccurs="0" ref="EMSForm"/>
+            <xsd:element minOccurs="0" ref="IMGForm"/>
+         </xsd:all>
+         <xsd:attribute name="targetNamespace" type="xsd:string" use="optional"/>
+         <xsd:attribute name="CaseID" type="xsd:string" use="required"/>
+         <xsd:attribute name="NumOfVehicle" type="xsd:integer" use="required"/>
+         <xsd:attribute name="Author" type="xsd:string" use="required"/>
+         <xsd:attribute name="Location" type="xsd:string" use="required"/>
+         <xsd:attribute name="Version" type="xsd:string" use="required"/>
+         <xsd:attribute name="CaseStr" type="xsd:string" use="required"/>
+         <xsd:attribute name="Origin" type="xsd:string" use="required"/>
+         <xsd:attribute name="Comment" type="xsd:string" use="required"/>
+         <xsd:attribute name="schemaLocation" type="xsd:string" use="optional"/>
+      </xsd:complexType>
+   </xsd:element>
+   <xsd:complexType name="sciPickTypeSAS">
+      <xsd:simpleContent>
+			      <xsd:extension base="xsd:string">
+				        <xsd:attribute name="value" type="xsd:string" use="optional"/>
+				        <xsd:attribute name="sasCode" type="xsd:string" use="optional"/>
+				        <xsd:attribute name="UOM" type="xsd:string" use="optional"/>
+				        <xsd:attribute name="Visible" type="xsd:boolean" use="optional"/>
+				        <xsd:attribute name="Sanitize" type="xsd:boolean" use="optional"/>
+				        <xsd:attribute name="label" type="xsd:string" use="optional"/>
+				        <xsd:attribute name="protectedValue" type="xsd:string" use="optional"/>
+			      </xsd:extension>
+		    </xsd:simpleContent>
+   </xsd:complexType>
+   <xsd:element name="SciCaseForm">
+      <xsd:complexType>
+         <xsd:complexContent>
+				        <xsd:extension base="CaseSciType"/>
+			      </xsd:complexContent>
+      </xsd:complexType>
+   </xsd:element>
+   <xsd:complexType name="CaseSciType">
+      <xsd:sequence>
+         <xsd:element name="Crash" type="CrashType" minOccurs="0"/>
+         <xsd:element name="CaseVehicle" type="CaseVehicleType" minOccurs="0"/>
+         <xsd:element name="Occupants" type="OccupantsType" minOccurs="0"/>
+         <xsd:element name="AirbagDeployment" type="AirbagDeploymentType" minOccurs="0"/>
+         <xsd:element name="SCIOccupants" type="SciOccupantsType" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="AirmisID" type="xsd:integer" use="required"/>
+      <xsd:attribute name="noNamespaceSchemaLocation" type="xsd:string" use="optional"/>
+   </xsd:complexType>
+   <xsd:complexType name="CrashType">
+      <xsd:sequence>
+         <xsd:element name="CaseNumber" type="sciPickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="DayOfWeek" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="SCICaseType" type="sciPickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE,LU</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="ProcessStatus" type="sciPickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation/>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="State" type="stateTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE,LU</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="InvestigationDate" type="sciPickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation/>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="OccupantFatality" type="sciPickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE,LU</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="Report" minOccurs="0">
+            <xsd:complexType>
+               <xsd:simpleContent>
+						            <xsd:extension base="sciPickTypeSAS">
+							              <xsd:attribute name="type" type="xsd:integer" use="required"/>
+							              <xsd:attribute name="version" type="xsd:boolean" use="required"/>
+						            </xsd:extension>
+					          </xsd:simpleContent>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+      <xsd:attribute name="NassCaseID" type="xsd:integer" use="required"/>
+   </xsd:complexType>
+   <xsd:complexType name="stateTypeSAS">
+      <xsd:complexContent>
+			      <xsd:extension base="sciPickTypeSAS">
+				        <xsd:attribute name="name" type="xsd:string" use="required"/>
+			      </xsd:extension>
+		    </xsd:complexContent>
+   </xsd:complexType>
+   <xsd:complexType name="CaseVehicleType">
+      <xsd:sequence>
+         <xsd:element name="Year" type="sciPickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>SE,LU</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="Make" type="sciPickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>SE,LU</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="Model" type="sciPickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>SE,LU</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="MakeModelIndex" type="sciPickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>SE,LU</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="ObjectContacted" type="sciPickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Pre-ImpactBraking" type="sciPickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>SE</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="MaxAIS" type="xsd:string" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>SE</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="MaxISS" type="xsd:string" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>SE</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+      </xsd:sequence>
+      <xsd:attribute name="VehicleID"/>
+   </xsd:complexType>
+   <xsd:complexType name="OccupantsType">
+      <xsd:sequence>
+         <xsd:element name="Total" type="sciPickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Belted" type="sciPickTypeSAS" minOccurs="0"/>
+         <xsd:element name="DriverAge" type="sciPickTypeSAS" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="AirbagDeploymentType">
+      <xsd:sequence>
+         <xsd:element name="Driver" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="Passenger" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="DeltaV" type="sciPickTypeSAS" minOccurs="0"/>
+         <xsd:element name="CDCForDeployment" type="xsd:string" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="SciOccupantsType">
+      <xsd:sequence>
+         <xsd:element name="Occupant" type="SciOccType" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="SciOccType">
+      <xsd:sequence>
+         <xsd:element name="Age" type="sciPickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="Height" type="sciPickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="Weight" type="sciPickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="Sex" type="sciPickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE,LU,ENG=Gender</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="Mortality" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="SeatLocation" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="SeatType" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="Posture" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="BeltsAvailable" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="BeltUse" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="AutoBelt" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="ChildSeatUsed" type="xsd:string" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="OccupantID" type="xsd:integer" use="required"/>
+      <xsd:attribute name="OccNumber" type="xsd:integer" use="required"/>
+   </xsd:complexType>
+   <xsd:element name="CaseForm" type="CaseFormType"/>
+   <xsd:complexType name="caseCaseType">
+      <xsd:sequence>
+         <xsd:element name="Crash" type="caseCrashType" minOccurs="0"/>
+         <xsd:element name="CaseSummary" type="caseSummaryType" minOccurs="0"/>
+         <xsd:element name="Events" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="EventSum" maxOccurs="unbounded" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:complexContent>
+									                  <xsd:extension base="caseEventSumType"/>
+								                </xsd:complexContent>
+                     </xsd:complexType>
+                  </xsd:element>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="Vehicles" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="NumberVehicles" type="casepickTypeSAS" minOccurs="0">
+                     <xsd:annotation>
+								                <xsd:documentation>SE,LU</xsd:documentation>
+							              </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element name="VehicleSum" type="caseVehicleType" maxOccurs="unbounded" minOccurs="0"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="Persons" nillable="true" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="Person" type="casePersonType" minOccurs="0" maxOccurs="unbounded"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="List" minOccurs="0">
+            <xsd:complexType>
+               <xsd:complexContent>
+						            <xsd:extension base="caseVisibleSanitize">
+							              <xsd:sequence minOccurs="0">
+								                <xsd:element name="MAXSEVERITY" type="xsd:string"/>
+								                <xsd:element name="FATALQTY" type="xsd:string"/>
+								                <xsd:element name="CHILDSEATQTY" type="xsd:string"/>
+								                <xsd:element name="AIRBAGQTY" type="xsd:string"/>
+							              </xsd:sequence>
+						            </xsd:extension>
+					          </xsd:complexContent>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="casepickTypeSAS">
+      <xsd:simpleContent>
+			      <xsd:extension base="xsd:string">
+				        <xsd:attribute name="value" type="xsd:string" use="optional"/>
+				        <xsd:attribute name="sasCode" type="xsd:string" use="optional"/>
+				        <xsd:attribute name="label" type="xsd:string" use="optional"/>
+				        <xsd:attribute name="Visible" type="xsd:string" use="optional"/>
+				        <xsd:attribute name="Sanitize" type="xsd:string" use="optional"/>
+				        <xsd:attribute name="UOM" type="xsd:string" use="optional"/>
+			      </xsd:extension>
+		    </xsd:simpleContent>
+   </xsd:complexType>
+   <xsd:complexType name="caseCrashType">
+      <xsd:sequence>
+         <xsd:element name="PSU" type="casepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="CaseNumber" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="Stratum" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="Weight" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="CrashDate" type="xsd:string" nillable="true" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>Builtin Simple types e.g. "xsd:date" have been used extensively to 
+			attempt to match the data types in the database tables. 
+			This typing may also provide hints to Oracle when it 
+			constructs sql types. Note that null values will not validate against 
+			"xsd:date" or "xsd:int," therefore elements typed this way must 
+			also be nillable (allowed to be null or empty).</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="DayOfWeek" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="CrashTime" nillable="true" minOccurs="0">
+            <xsd:complexType>
+               <xsd:simpleContent>
+						            <xsd:extension base="xsd:string">
+							              <xsd:attribute name="UOM" type="xsd:string" use="optional"/>
+						            </xsd:extension>
+					          </xsd:simpleContent>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="Status" type="casepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Month" type="casepickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE,LU</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="Year" type="casepickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE,LU</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="PSUStrat" type="casepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="SASvariables" nillable="true" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="SpecifyAccident" type="xsd:string" minOccurs="0"/>
+                  <xsd:element name="SpecifyConfig" type="xsd:string" minOccurs="0"/>
+                  <xsd:element name="VehicleType" type="xsd:string" minOccurs="0"/>
+                  <xsd:element name="ConfigType" type="xsd:string" minOccurs="0"/>
+                  <xsd:element name="VehForms" type="xsd:integer" minOccurs="0"/>
+                  <xsd:element name="Events" type="xsd:integer" minOccurs="0"/>
+               </xsd:sequence>
+               <xsd:attribute name="Visible" type="xsd:boolean" use="required"/>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+      <xsd:attribute name="Visible" type="xsd:boolean" use="optional"/>
+   </xsd:complexType>
+   <xsd:complexType name="caseStructureType">
+      <xsd:sequence>
+         <xsd:element name="CaseStruct" type="caseCaseStructType" minOccurs="0"/>
+         <xsd:element name="Vehicles" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="VehicleStructure" type="caseVehicleStructureType" maxOccurs="unbounded"
+                               minOccurs="0"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="Occupants" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="Occupant" type="caseOccupantType" minOccurs="0" maxOccurs="unbounded"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="MedicalRecords" nillable="true" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="MedicalRecord" type="caseMedicalRecordsType" minOccurs="0"
+                               maxOccurs="unbounded">
+                     <xsd:annotation>
+								                <xsd:documentation>It is possible to have a case with no MedicalRecords hence 0 minOccurs added, and MedicalRecords element nillable. </xsd:documentation>
+							              </xsd:annotation>
+                  </xsd:element>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="Comment" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="Dates" type="caseDatesType" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="caseCaseStructType">
+      <xsd:sequence>
+         <xsd:element name="SceneComplete" type="xsd:date" nillable="true" minOccurs="0"/>
+         <xsd:element name="VehicleCase" type="caseVehiclesCaseType" minOccurs="0"/>
+         <xsd:element name="TotalOccupants" type="xsd:decimal" minOccurs="0"/>
+         <xsd:element name="TotalMedRecords" type="xsd:decimal" nillable="true" minOccurs="0"/>
+         <xsd:element name="DueDate" type="xsd:date" nillable="true" minOccurs="0"/>
+         <xsd:element name="CASEID" type="xsd:decimal" minOccurs="0"/>
+         <xsd:element name="Type" type="casepickTypeSAS" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="caseSummaryType">
+      <xsd:sequence>
+         <xsd:element name="CrashType" type="casepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Configuration" type="casepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Summary" type="xsd:string" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="caseEventSumType">
+      <xsd:sequence>
+         <xsd:element name="Class" type="casepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="AreaOfDamage" type="casepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Contacted" type="casepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="ContactedClass" type="casepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="ContactedAreaOfDamage" type="casepickTypeSAS" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="EventNumber" type="xsd:decimal" use="required"/>
+      <xsd:attribute name="VehicleNumber" type="xsd:decimal" use="required"/>
+      <xsd:attribute name="StrikeVehNumEvent" type="xsd:decimal" use="required"/>
+      <xsd:attribute name="StruckVehNumEvent" type="xsd:decimal" use="required"/>
+   </xsd:complexType>
+   <xsd:complexType name="caseVehicleType">
+      <xsd:sequence>
+         <xsd:element name="Year" type="casepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Make" type="casepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Model" type="casepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="DamagePlane" type="casepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Severity" type="casepickTypeSAS" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="VehicleNumber" type="xsd:string" use="required"/>
+   </xsd:complexType>
+   <xsd:complexType name="casePersonType">
+      <xsd:sequence>
+         <xsd:element name="Role" type="casepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Seat" minOccurs="0">
+            <xsd:complexType>
+               <xsd:attribute name="seatrow"/>
+               <xsd:attribute name="seatloc"/>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="Restraints" type="casepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="AIScodes" type="casepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="MaxSeverity" minOccurs="0">
+            <xsd:complexType>
+               <xsd:simpleContent>
+						            <xsd:extension base="xsd:string">
+							              <xsd:attribute name="value" type="xsd:string" use="optional"/>
+						            </xsd:extension>
+					          </xsd:simpleContent>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="InjurySource" type="xsd:string" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="VehicleNumber" type="xsd:int"/>
+      <xsd:attribute name="OccNumber" type="xsd:int"/>
+   </xsd:complexType>
+   <xsd:complexType name="caseMedicalRecordsType">
+      <xsd:sequence>
+         <xsd:element name="RecordType" type="casepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Facility" type="casepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Released" type="casepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Requested" type="xsd:date" nillable="true" minOccurs="0"/>
+         <xsd:element name="Received" type="xsd:date" nillable="true" minOccurs="0"/>
+         <xsd:element name="Scanned" type="xsd:string" nillable="true" minOccurs="0"/>
+         <xsd:element name="Phone" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="Reason" type="casepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="ForwardedZone" type="xsd:string" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="VehicleNumber" type="xsd:integer" use="required"/>
+      <xsd:attribute name="OccupantNumber" type="xsd:integer" use="required"/>
+   </xsd:complexType>
+   <xsd:complexType name="caseDatesType">
+      <xsd:sequence>
+         <xsd:element name="Due" type="xsd:date" nillable="true" minOccurs="0"/>
+         <xsd:element name="ReleasedOriginal" type="xsd:date" nillable="true" minOccurs="0"/>
+         <xsd:element name="ApprovedDate" type="xsd:date" nillable="true" minOccurs="0"/>
+         <xsd:element name="ApprovedCurrent" nillable="true" minOccurs="0"/>
+         <xsd:element name="SampleDate" type="xsd:date" nillable="true" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="caseVehiclesCaseType">
+      <xsd:sequence>
+         <xsd:element name="CDSinTransport" type="xsd:decimal" minOccurs="0"/>
+         <xsd:element name="CDSnotInTransport" type="xsd:decimal" minOccurs="0"/>
+         <xsd:element name="NonCDSinTransport" type="xsd:decimal" minOccurs="0"/>
+         <xsd:element name="Total" type="xsd:decimal" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="caseVehicleStructureType">
+      <xsd:sequence>
+         <xsd:element name="Type" type="casepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Inspected" type="xsd:date" nillable="true" minOccurs="0"/>
+         <xsd:element name="Occupants" type="xsd:integer" minOccurs="0"/>
+         <xsd:element name="Comment" type="xsd:string" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="VehicleNumber" type="xsd:int" use="required"/>
+   </xsd:complexType>
+   <xsd:complexType name="caseOccupantType">
+      <xsd:sequence>
+         <xsd:element name="InterviewRequired" type="casepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Completed" type="xsd:string" nillable="true" minOccurs="0"/>
+         <xsd:element name="Reason" type="xsd:string" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="VehicleNumber" type="xsd:integer" use="required"/>
+      <xsd:attribute name="OccupantNumber" type="xsd:integer" use="required"/>
+   </xsd:complexType>
+   <xsd:complexType name="caseVisibleSanitize">
+      <xsd:attribute name="Visible" type="xsd:boolean" use="required"/>
+      <xsd:attribute name="Sanitize" type="xsd:boolean" use="required"/>
+   </xsd:complexType>
+   <xsd:complexType name="CaseFormType">
+      <xsd:complexContent>
+			      <xsd:extension base="caseCaseType">
+				        <xsd:attribute name="caseID" type="xsd:integer" use="required"/>
+				        <xsd:attribute name="noNamespaceSchemaLocation" type="xsd:string" use="optional"/>
+			      </xsd:extension>
+		    </xsd:complexContent>
+   </xsd:complexType>
+   <xsd:element name="GeneralVehicleForms" type="GeneralVehicleFormsType"/>
+   <xsd:element name="GeneralVehicleForm" type="GeneralVehicleFormType"/>
+   <xsd:complexType name="gvpickTypeSAS">
+      <xsd:simpleContent>
+			      <xsd:extension base="xsd:string">
+				        <xsd:attribute name="value" type="xsd:string" use="optional"/>
+				        <xsd:attribute name="sasCode" type="xsd:string" use="optional"/>
+				        <xsd:attribute name="UOM" type="xsd:string" use="optional"/>
+				        <xsd:attribute name="Visible" type="xsd:boolean" use="optional"/>
+				        <xsd:attribute name="Sanitize" type="xsd:boolean" use="optional"/>
+				        <xsd:attribute name="label" type="xsd:string" use="optional"/>
+			      </xsd:extension>
+		    </xsd:simpleContent>
+   </xsd:complexType>
+   <xsd:complexType name="gvpickTypeSASSpecify">
+      <xsd:simpleContent>
+			      <xsd:extension base="gvpickTypeSAS">
+				        <xsd:attribute name="specify" type="xsd:string" use="optional"/>
+			      </xsd:extension>
+		    </xsd:simpleContent>
+   </xsd:complexType>
+   <xsd:complexType name="gvVehicleType">
+      <xsd:sequence>
+         <xsd:element name="ModelYear" type="gvpickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE,LU</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="Make" type="gvpickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE,LU</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="Model" type="gvpickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE,LU</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="VIN" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="BodyCategory" type="gvpickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE,LU</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="BodyType" type="gvpickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE,LU</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="TransportStatus" type="gvpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="VehSpecialUse" type="gvpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Inspection" type="gvpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="InspectionInterval" type="gvpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="CurbWeight" type="gvpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="CurbWeightSource" type="gvpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="CargoWeight" type="gvpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="CargoWeightSource" type="gvpickTypeSAS" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="gvSpecificationsType">
+      <xsd:sequence>
+         <xsd:element name="Wheelbase" type="gvpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="OverallLength" type="gvpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="MaximumWidth" type="gvpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="CurbWeight" type="gvpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="AverageTrack" type="gvpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="FrontOverhang" type="gvpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="RearOverhang" type="gvpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="UndeformedEndWidth" type="gvpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="EngineCylinders" type="gvpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="EngineDisplacement" type="gvpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="ResearcherEstimatedDisposition" type="gvpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="AssessmentJustification" type="gvpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="CertifiedAlteredVehicle" type="gvpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="SuspectedModifications" type="xsd:string" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="gvPoliceReportType">
+      <xsd:sequence>
+         <xsd:element name="TowStatus" type="gvpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="TravelSpeed" type="gvpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="PostedSpeedLimit" type="gvpickTypeSAS" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="gvDriverType">
+      <xsd:sequence>
+         <xsd:element name="DriverPresent" type="gvpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="PARAlcoholPresent" type="gvpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="AlcoholTest" type="gvpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="TestResult" type="gvpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="TestSource" type="gvpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="PAROtherDrugPresent" type="gvpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="OtherDrugTestResult" type="gvpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="ZipCode" type="gvpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Race" type="gvpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Ethnicity" type="gvpickTypeSAS" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="gvPrecrashType">
+      <xsd:sequence>
+         <xsd:element name="Environment" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="Trafficway" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="RelationToJunction" type="gvpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="RelationToFlow" type="gvpickTypeSAS" minOccurs="0"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element name="Roadway" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="TravelLanes" type="gvpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="Alignment" type="gvpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="Profile" type="gvpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="SurfaceType" type="gvpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="SurfaceCondition" type="gvpickTypeSAS" minOccurs="0"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element name="Conditions" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="Light" type="gvpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="Weather" type="gvpickTypeSAS" maxOccurs="10" minOccurs="0"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element name="TrafficControlDevices" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="Device" type="gvpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="Functioning" type="gvpickTypeSAS" minOccurs="0"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="Movement" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="PreeventMovement" type="gvpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="CriticalPrecrashCat" type="gvpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="CriticalPrecrashEvent" type="gvpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="AttemptedAvoidanceManeuver" type="gvpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="PreimpactStability" type="gvpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="PreimpactLocation" type="gvpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="CrashType" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:simpleContent>
+									                  <xsd:extension base="xsd:string">
+										                    <xsd:attribute name="ConfigCatStr" type="xsd:string" use="optional"/>
+										                    <xsd:attribute name="value" type="xsd:string" use="required"/>
+									                  </xsd:extension>
+								                </xsd:simpleContent>
+                     </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element name="InattentionToDriving" type="gvpickTypeSAS" minOccurs="0"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="Distractions" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="DistractionElement" type="gvpickTypeSASSpecify" minOccurs="0"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="gvGVType">
+      <xsd:sequence>
+         <xsd:element name="Vehicle" type="gvVehicleType" minOccurs="0"/>
+         <xsd:element name="Specifications" type="gvSpecificationsType" minOccurs="0"/>
+         <xsd:element name="OfficialRecords" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="PoliceReport" type="gvPoliceReportType" minOccurs="0"/>
+                  <xsd:element name="Driver" type="gvDriverType" minOccurs="0"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="Precrash" type="gvPrecrashType" minOccurs="0"/>
+         <xsd:element name="Rollover" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="Data" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="Type" type="gvpickTypeSAS" minOccurs="0">
+                              <xsd:annotation>
+											                      <xsd:documentation>SE,LU</xsd:documentation>
+										                    </xsd:annotation>
+                           </xsd:element>
+                           <xsd:element name="QuarterTurns" type="gvpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="InterruptedRollover" type="gvpickTypeSAS" minOccurs="0"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element name="PreRollover" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="Maneuver" type="gvpickTypeSAS" minOccurs="0"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element name="Initiation" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="Type" type="gvpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="Location" type="gvpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="ObjectContactedClass" type="gvpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="ObjectContacted" type="gvpickTypeSAS" minOccurs="0"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element name="Specifics" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="InitialLocationFirstForce" type="gvpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="InitialDirection" type="gvpickTypeSAS" minOccurs="0"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element name="Measurement" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="EstimatedDistance" type="gvpickTypeSAS" minOccurs="0"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="Reconstruction" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="HeadingAngleForHighestDeltaV" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="ImpactCategory" type="gvpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="AngleThisVehicle" type="gvpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="AngleOtherVehicle" type="gvpickTypeSAS" minOccurs="0"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element name="ReconstructionData" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="TowedTrailingUnit" type="gvpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="DocTrajectoryData" type="gvpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="PostCollisionCondOfTreePole" type="gvpickTypeSAS" minOccurs="0"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="DeltaV" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="Event" minOccurs="0" maxOccurs="unbounded">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="EventNumber" type="gvpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="BasisForDeltaV" type="gvpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="ComputerGeneratedDeltaV" minOccurs="0">
+                              <xsd:complexType>
+                                 <xsd:sequence>
+                                    <xsd:element name="Total" type="gvpickTypeSAS" minOccurs="0"/>
+                                    <xsd:element name="Longitudinal" type="gvpickTypeSAS" minOccurs="0"/>
+                                    <xsd:element name="Lateral" type="gvpickTypeSAS" minOccurs="0"/>
+                                    <xsd:element name="ConfidenceLevel" type="gvpickTypeSAS" minOccurs="0"/>
+                                    <xsd:element name="EnergyAbsorption" type="gvpickTypeSAS" minOccurs="0"/>
+                                    <xsd:element name="ImpactSpeed" type="gvpickTypeSAS" minOccurs="0"/>
+                                 </xsd:sequence>
+                              </xsd:complexType>
+                           </xsd:element>
+                           <xsd:element name="BarrierEquivalentSpeed" type="gvpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="EstimatedDeltaV" type="gvpickTypeSAS" minOccurs="0"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="gvDerivedType">
+      <xsd:sequence>
+         <xsd:element name="CaseId" type="xsd:integer" minOccurs="0"/>
+         <xsd:element name="VehicleId" type="xsd:integer" minOccurs="0"/>
+         <xsd:element name="VehicleNumber" type="xsd:integer" minOccurs="0"/>
+         <xsd:element name="Treatment" type="xsd:integer" minOccurs="0"/>
+         <xsd:element name="AIS" type="xsd:integer" minOccurs="0"/>
+         <xsd:element name="InjurySeverity" type="xsd:integer" minOccurs="0"/>
+         <xsd:element name="Injured" type="xsd:integer" minOccurs="0"/>
+         <xsd:element name="Drive" type="xsd:integer" minOccurs="0"/>
+         <xsd:element name="VINLength" type="xsd:integer" minOccurs="0"/>
+         <xsd:element name="OtherWeight" type="xsd:integer" minOccurs="0"/>
+         <xsd:element name="OtherBodyType" type="xsd:integer" minOccurs="0"/>
+         <xsd:element name="FatalId" type="xsd:integer" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="Visible" type="xsd:boolean" use="optional"/>
+      <xsd:attribute name="Sanitize" type="xsd:boolean" use="optional"/>
+   </xsd:complexType>
+   <xsd:complexType name="GeneralVehicleFormType">
+      <xsd:complexContent>
+			      <xsd:extension base="gvGVType">
+				        <xsd:attribute name="CaseID" type="xsd:integer" use="required"/>
+				        <xsd:attribute name="VehicleID" type="xsd:integer" use="required"/>
+				        <xsd:attribute name="VehicleNumber" type="xsd:integer" use="required"/>
+				        <xsd:attribute name="CDStype" type="xsd:integer" use="required"/>
+			      </xsd:extension>
+		    </xsd:complexContent>
+   </xsd:complexType>
+   <xsd:complexType name="GeneralVehicleFormsType">
+      <xsd:sequence>
+         <xsd:element ref="GeneralVehicleForm" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute name="caseID" type="xsd:integer" use="required"/>
+      <xsd:attribute name="noNamespaceSchemaLocation" type="xsd:string" use="optional"/>
+   </xsd:complexType>
+   <xsd:element name="VehicleExteriorForms" type="VehicleExteriorFormsType"/>
+   <xsd:complexType name="vepickTypeSAS">
+      <xsd:simpleContent>
+			      <xsd:extension base="xsd:string">
+				        <xsd:attribute name="value" type="xsd:string" use="optional"/>
+				        <xsd:attribute name="sasCode" type="xsd:string" use="optional"/>
+				        <xsd:attribute name="Visible" type="xsd:boolean" use="optional"/>
+				        <xsd:attribute name="Sanitize" type="xsd:boolean" use="optional"/>
+				        <xsd:attribute name="UOM" type="xsd:string" use="optional"/>
+				        <xsd:attribute name="label" type="xsd:string" use="optional"/>
+			      </xsd:extension>
+		    </xsd:simpleContent>
+   </xsd:complexType>
+   <xsd:complexType name="veSpecificationsType">
+      <xsd:sequence>
+         <xsd:element name="Wheelbase" type="vepickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE VA</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="OverallLength" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="MaximumWidth" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="CurbWeight" type="vepickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE VA</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="AverageTrack" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="FrontOverhang" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="RearOverhang" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="UndeformedEndWidth" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="EngineCylinders" type="vepickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE VA</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="EngineDisplacement" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="TransmissionType" type="vepickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE LU</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="DriveWheels" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="VehicleDisposition" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="CertifiedAlteredVehicle" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="SuspectedModifications" type="xsd:string" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="veVehicleType">
+      <xsd:sequence>
+         <xsd:element name="ModelYear" type="xsd:integer" minOccurs="0"/>
+         <xsd:element name="Make" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Model" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="VIN" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="BodyType" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="TransportStatus" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="VehSpecialUse" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Inspection" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="InspectionInterval" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="CurbWeight" type="vepickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE VA</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="CurbWeightSource" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="CargoWeight" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="CargoWeightSource" type="vepickTypeSAS" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="vePoliceReportType">
+      <xsd:sequence>
+         <xsd:element name="TowStatus" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="TravelSpeed" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="PostedSpeedLimit" type="vepickTypeSAS" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="veDriverType">
+      <xsd:sequence>
+         <xsd:element name="DriverPresent" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="OccupantNumber" type="xsd:integer" minOccurs="0"/>
+         <xsd:element name="PARAlcoholPresent" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="AlcoholTest" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="TestResult" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="TestSource" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="PAROtherDrugPresent" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="OtherDrugTestResult" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="ZipCode" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="RaceEthnicOrigin" type="vepickTypeSAS" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="vePrecrashType">
+      <xsd:sequence>
+         <xsd:element name="Trafficway" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="RelationToJunction" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="RelationToFlow" type="vepickTypeSAS" minOccurs="0"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="Roadway" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="TravelLanes" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Alignment" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Profile" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="SurfaceType" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="SurfaceCondition" type="vepickTypeSAS" minOccurs="0"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="Conditions" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="Light" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Atmosphere" type="vepickTypeSAS" minOccurs="0"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="TrafficControlDevices" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="Device" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Functioning" type="vepickTypeSAS" minOccurs="0"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="veVEform">
+      <xsd:sequence>
+         <xsd:element name="Vehicle" type="veVehicleType" minOccurs="0"/>
+         <xsd:element name="Specifications" type="veSpecificationsType" minOccurs="0"/>
+         <xsd:element name="Fire" type="veFireType" minOccurs="0"/>
+         <xsd:element name="Fuel" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="FuelElement" minOccurs="0" maxOccurs="unbounded">
+                     <xsd:complexType>
+                        <xsd:complexContent>
+									                  <xsd:extension base="veFuelElementType">
+										                    <xsd:attribute name="FuelNumber" type="xsd:integer" use="required"/>
+									                  </xsd:extension>
+								                </xsd:complexContent>
+                     </xsd:complexType>
+                  </xsd:element>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="CDC" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="CDCevent" minOccurs="0" maxOccurs="unbounded">
+                     <xsd:complexType>
+                        <xsd:complexContent>
+									                  <xsd:extension base="veCDCeventType">
+										                    <xsd:attribute name="eventNumber" type="xsd:unsignedInt" use="optional"/>
+										                    <xsd:attribute name="DeformNumber" type="xsd:string" use="required"/>
+									                  </xsd:extension>
+								                </xsd:complexContent>
+                     </xsd:complexType>
+                  </xsd:element>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="Crush" minOccurs="0">
+            <xsd:complexType>
+               <xsd:complexContent>
+						            <xsd:extension base="veCrushType"/>
+					          </xsd:complexContent>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="EDR" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="Obtained" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="EDRfile" minOccurs="0" maxOccurs="unbounded">
+                     <xsd:complexType>
+                        <xsd:complexContent>
+									                  <xsd:extension base="veEDRfileType">
+										                    <xsd:attribute name="EDRID" type="xsd:int" use="required"/>
+									                  </xsd:extension>
+								                </xsd:complexContent>
+                     </xsd:complexType>
+                  </xsd:element>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="Tire" type="veTireType" minOccurs="0"/>
+         <xsd:element name="Sketches" type="veSketchesType" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="CaseID" type="xsd:integer" use="required"/>
+      <xsd:attribute name="VehicleNumber" type="xsd:integer" use="required"/>
+      <xsd:attribute name="VehicleID" type="xsd:integer" use="required"/>
+   </xsd:complexType>
+   <xsd:complexType name="veRecTireType">
+      <xsd:sequence>
+         <xsd:element name="SizeType" type="vepickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE LU</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="Size" type="vepickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE VA</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="ColdPressure" type="vepickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE VA</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="veRecommendationType">
+      <xsd:sequence>
+         <xsd:element name="RecommendationObject" maxOccurs="unbounded" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="Front" type="veRecTireType" minOccurs="0">
+                     <xsd:annotation>
+								                <xsd:documentation>SE</xsd:documentation>
+							              </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element name="Rear" type="veRecTireType" minOccurs="0">
+                     <xsd:annotation>
+								                <xsd:documentation>SE</xsd:documentation>
+							              </xsd:annotation>
+                  </xsd:element>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="veTiresType">
+      <xsd:sequence>
+         <xsd:element name="TireObject" type="veTireElementType" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="veTireElementType">
+      <xsd:sequence>
+         <xsd:element name="Location" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Manufacturer" type="vepickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="Model" type="vepickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="Type" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Size" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="TIN" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="TreadDepth" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="MeasuredPressure" type="vepickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE VA</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="Restricted" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Damage" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="DamageReason" type="vepickTypeSAS" minOccurs="0">
+                     <xsd:annotation>
+								                <xsd:documentation>SE</xsd:documentation>
+							              </xsd:annotation>
+                  </xsd:element>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+      <xsd:attribute name="value" type="xsd:string" use="optional"/>
+   </xsd:complexType>
+   <xsd:complexType name="veTireType">
+      <xsd:sequence>
+         <xsd:element name="General" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="GVWR" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="GAWRFront" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="GAWRRear" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="RecommendedTireSize" type="veRecommendationType" minOccurs="0"/>
+                  <xsd:element name="Tires" type="veTiresType" minOccurs="0"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="veSketchesType">
+      <xsd:sequence>
+         <xsd:element name="ExtentZoneMeasurements" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="Front" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="EF1Hood" type="vepickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="EF2Windshield" type="vepickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="EF3Pillar" type="vepickTypeSAS" minOccurs="0"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element name="Back" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="EB1Trunk" type="vepickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="EB2BackLight" type="vepickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="EB3Pillar" type="vepickTypeSAS" minOccurs="0"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element name="Side" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="ES1Door" type="vepickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="ES2Glazing" type="vepickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="ES3Roof" type="vepickTypeSAS" minOccurs="0"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element name="Vertical" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="EV1Roof" type="vepickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="EV2Glazing" type="vepickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="EV3Door" type="vepickTypeSAS" minOccurs="0"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="BaselineMeasurements" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="Left" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="BL1FrontOH" type="vepickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="BL2FrontBC" type="vepickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="BL3Wheelbase" type="vepickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="BL4RearBC" type="vepickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="BL5RearOH" type="vepickTypeSAS" minOccurs="0"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element name="Right" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="BR1" type="vepickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="BR2" type="vepickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="BR3" type="vepickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="BR4" type="vepickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="BR5" type="vepickTypeSAS" minOccurs="0"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="OtherMeasurements" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="Front" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="TKWFTrackWidth" type="vepickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="OBHFFrontBumper" type="vepickTypeSAS" minOccurs="0"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element name="Rear" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="TKWR" type="vepickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="OBHR" type="vepickTypeSAS" minOccurs="0"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="Pick-UpsOnly" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="POALBPillar" minOccurs="0"/>
+                  <xsd:element name="PBLBPillar" minOccurs="0"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="veFuelElementType">
+      <xsd:sequence>
+         <xsd:element name="FuelType" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="TankLocation" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="TankType" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="FillerCapLocation" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="TankPreCrashCondition" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="TankDamage" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="LeakageLocation" type="vepickTypeSAS" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="veFireType">
+      <xsd:sequence>
+         <xsd:element name="Origin" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Occurrence" type="vepickTypeSAS" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="veMeasurementType">
+      <xsd:sequence>
+         <xsd:element name="Sign" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="PlaneCategory" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Max" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="C1" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="C2" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="C3" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="C4" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="C5" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="C6" type="vepickTypeSAS" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="SequenceNO" type="xsd:integer" use="required"/>
+   </xsd:complexType>
+   <xsd:complexType name="veRolloverMeasurementType">
+      <xsd:sequence>
+         <xsd:element name="Sign" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="PlaneCategory" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Max" type="vepickTypeSAS" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="SequenceNO" type="xsd:integer" use="required"/>
+   </xsd:complexType>
+   <xsd:complexType name="veCrushType">
+      <xsd:sequence>
+         <xsd:element name="CrushObject" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="ProfileNo" minOccurs="0"/>
+                  <xsd:element name="EventNumber" type="xsd:integer" minOccurs="0"/>
+                  <xsd:element name="DirectDamageLocation" type="xsd:string" minOccurs="0"/>
+                  <xsd:element name="FieldlLocation" type="xsd:string" minOccurs="0"/>
+                  <xsd:element name="MaxCrushLocation" type="xsd:string" minOccurs="0"/>
+                  <xsd:element name="CDCID" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="EventID" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="CDCNo" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="FieldL" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="FieldLD" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="SMASHL" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="DirectD" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="WidthCDC" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Category" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Measurements" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="Measurement" type="veMeasurementType" minOccurs="0" maxOccurs="unbounded"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element name="LateralMeasurements" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="LateralMeasurement" type="veRolloverMeasurementType" minOccurs="0"
+                                        maxOccurs="unbounded"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element name="VerticalMeasurements" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="VerticalMeasurement" type="veRolloverMeasurementType" minOccurs="0"
+                                        maxOccurs="unbounded"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element name="AVG_CMAX" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="AVG_C1" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="AVG_C2" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="AVG_C3" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="AVG_C4" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="AVG_C5" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="AVG_C6" type="vepickTypeSAS" minOccurs="0"/>
+               </xsd:sequence>
+               <xsd:attribute name="DeformNumber" type="xsd:string" use="required"/>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="veCDCeventType">
+      <xsd:sequence>
+         <xsd:element name="GAD" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="CDCID" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="EventID" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="ObjectContactedCategory" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="ObjectContacted" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="ForceDirection" type="vepickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE,LU</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="Increment" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="ClockDirection" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="OverUnderride" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="HeadingAngle" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="DeformationLocation" type="vepickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE,LU</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="LongLateral" type="vepickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE,LU</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="VerticalLateral" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Distribution" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Extent" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Summary" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="SideImpactData" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="PillarInvolvement" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="Pillar" minOccurs="0"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element name="SillHeight" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="DoorSillDiff" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="CmaxHeight" type="vepickTypeSAS" minOccurs="0"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="ComputerGeneratedDeltaV" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="Total" type="vepickTypeSAS" minOccurs="0">
+                     <xsd:annotation>
+								                <xsd:documentation>SE,LU</xsd:documentation>
+							              </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element name="Longitudinal" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Lateral" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="EnergyAbsorption" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="ImpactSpeed" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="BarrierEquivalentSpeed" type="vepickTypeSAS" minOccurs="0">
+                     <xsd:annotation>
+								                <xsd:documentation>SE,LU</xsd:documentation>
+							              </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element name="EstimatedDeltaV" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Rank" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Basis" type="vepickTypeSAS" minOccurs="0"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="veEDRdriverType">
+      <xsd:sequence>
+         <xsd:element name="Belt" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Seat" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Pretensioner" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="SeatTrackForward" type="vepickTypeSAS" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="veDeltaVType">
+      <xsd:sequence>
+         <xsd:element name="Time" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="DeltaV" type="vepickTypeSAS" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="vePreCrashDataType">
+      <xsd:sequence>
+         <xsd:element name="Preseconds" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Speed" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="EngineSpeed" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Throttle" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="BrakeSwitchStatus" type="vepickTypeSAS" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="veAirbagDeployTimeType">
+      <xsd:sequence>
+         <xsd:element name="Type" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Position" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Stage1" type="vepickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Stage2" type="vepickTypeSAS" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="veEDRfileType">
+      <xsd:sequence>
+         <xsd:element name="EDRgeneralData" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="Version" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="LampStatus" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="CDC" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:complexContent>
+									                  <xsd:extension base="vepickTypeSAS">
+										                    <xsd:attribute name="CDCID" type="xsd:int" use="optional"/>
+										                    <xsd:attribute name="EventSeqNumber" type="xsd:int" use="optional"/>
+									                  </xsd:extension>
+								                </xsd:complexContent>
+                     </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element name="DeployStatus" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="IgnitionCycleEvent" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Investigation" type="vepickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Driver" type="veEDRdriverType" minOccurs="0"/>
+                  <xsd:element name="Passenger" type="veEDRdriverType" minOccurs="0"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="AirbagDeploy" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="AirbagDeployTime" type="veAirbagDeployTimeType" minOccurs="0"
+                               maxOccurs="unbounded"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="PreCrash" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="PreCrashData" type="vePreCrashDataType" minOccurs="0"
+                               maxOccurs="unbounded"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="Crash" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="Longitudinal" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="DeltaV" type="veDeltaVType" minOccurs="0" maxOccurs="unbounded"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element name="Lateral" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="DeltaV" type="veDeltaVType" minOccurs="0" maxOccurs="unbounded"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="VehicleExteriorFormsType">
+      <xsd:sequence>
+         <xsd:element name="VehicleExteriorForm" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+               <xsd:complexContent>
+						            <xsd:extension base="veVEform"/>
+					          </xsd:complexContent>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+      <xsd:attribute name="caseID" type="xsd:string" use="required"/>
+      <xsd:attribute name="noNamespaceSchemaLocation" type="xsd:string" use="optional"/>
+   </xsd:complexType>
+   <xsd:element name="VehicleInteriorForms" type="VehicleInteriorFormsType"/>
+   <xsd:element name="VehicleInteriorForm" type="viVIType"/>
+   <xsd:complexType name="vipickTypeSAS">
+      <xsd:simpleContent>
+			      <xsd:extension base="xsd:string">
+				        <xsd:attribute name="value" type="xsd:string" use="optional"/>
+				        <xsd:attribute name="sasCode" type="xsd:string" use="optional"/>
+				        <xsd:attribute name="Visible" type="xsd:boolean" use="optional"/>
+				        <xsd:attribute name="Sanitize" type="xsd:boolean" use="optional"/>
+				        <xsd:attribute name="UOM" type="xsd:string" use="optional"/>
+				        <xsd:attribute name="label" type="xsd:string" use="optional"/>
+			      </xsd:extension>
+		    </xsd:simpleContent>
+   </xsd:complexType>
+   <xsd:complexType name="viVIType">
+      <xsd:sequence>
+         <xsd:element name="Integrity" type="viIntegrityType" minOccurs="0"/>
+         <xsd:element name="Glazing" minOccurs="0">
+            <xsd:complexType>
+               <xsd:complexContent>
+						            <xsd:extension base="viGlazingType"/>
+					          </xsd:complexContent>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="Intrusion" type="viIntrusionType" minOccurs="0"/>
+         <xsd:element name="Instrument" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="OdometerReading" type="vipickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="OdometerSource" type="vipickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="AdjustablePedal" type="vipickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="AdaptiveDrivingEquipment" type="vipickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="AdaptiveEquipment" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="AdaptiveEquipmentItem" type="vipickTypeSAS" minOccurs="0"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="SteeringWheel" type="viSteeringWheelType" minOccurs="0"/>
+         <xsd:element name="Contact" type="viContactType" minOccurs="0"/>
+         <xsd:element name="Ejection" minOccurs="0">
+            <xsd:complexType>
+               <xsd:complexContent>
+						            <xsd:extension base="viEjectionType"/>
+					          </xsd:complexContent>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="Entrapment" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="VehicleID"/>
+      <xsd:attribute name="VehicleNumber"/>
+   </xsd:complexType>
+   <xsd:complexType name="viIntegrityType">
+      <xsd:sequence>
+         <xsd:element name="PassengerCompartmentIntegrityLoss" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="PassCompIntegrity" type="vipickTypeSAS" minOccurs="0"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="PostCrashIntegrityLoss" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="IntegrityGrid" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="IntegrityLocation" type="viLocationGridType" maxOccurs="unbounded"
+                               minOccurs="0"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="viSteeringWheelType">
+      <xsd:sequence>
+         <xsd:element name="ColumnType" type="vipickTypeSAS" minOccurs="0"/>
+         <xsd:element name="TiltAdjustment" type="vipickTypeSAS" minOccurs="0"/>
+         <xsd:element name="TelescopicAdjustment" type="vipickTypeSAS" minOccurs="0"/>
+         <xsd:element name="LocationRimSpokeDeformation" type="vipickTypeSAS" minOccurs="0"/>
+         <xsd:element name="RimSpokeDeformation" type="vipickTypeSAS" nillable="true" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="viIntrusionType">
+      <xsd:sequence>
+         <xsd:element name="IntrusionWidth" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="RowWidth" minOccurs="0" maxOccurs="5">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="Location" type="vipickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="Width" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="IntrusionObject" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+               <xsd:complexContent>
+						            <xsd:extension base="viIntrusionGridType">
+							              <xsd:attribute name="IntrusionNumber" type="xsd:string" use="required"/>
+						            </xsd:extension>
+					          </xsd:complexContent>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="viEjectionType">
+      <xsd:sequence>
+         <xsd:element name="EjectionObject" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+               <xsd:complexContent>
+						            <xsd:extension base="viEjectionObjectType">
+							              <xsd:attribute name="EjectionNumber" type="xsd:int"/>
+							              <xsd:attribute name="OccNumber" type="xsd:string"/>
+						            </xsd:extension>
+					          </xsd:complexContent>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+      <xsd:attribute name="EjectionNumber" type="xsd:int"/>
+      <xsd:attribute name="OccNumber" type="xsd:int"/>
+   </xsd:complexType>
+   <xsd:complexType name="viGlazingType">
+      <xsd:sequence>
+         <xsd:element name="GlazingLocation" maxOccurs="unbounded" minOccurs="0">
+            <xsd:complexType>
+               <xsd:complexContent>
+						            <xsd:extension base="viGlazingGridType">
+							              <xsd:attribute name="LocationCode" type="xsd:string"/>
+							              <xsd:attribute name="sasCode" type="xsd:string" use="required"/>
+						            </xsd:extension>
+					          </xsd:complexContent>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="viContactType">
+      <xsd:sequence>
+         <xsd:element name="ContactArea" type="viContactGridType" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="viLocationGridType">
+      <xsd:sequence>
+         <xsd:element name="Location" minOccurs="0">
+            <xsd:complexType>
+               <xsd:simpleContent>
+						            <xsd:extension base="xsd:string">
+							              <xsd:attribute name="value" type="xsd:string" use="optional"/>
+						            </xsd:extension>
+					          </xsd:simpleContent>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="Opening" type="vipickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Failure" type="vipickTypeSAS" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="LocationCode" type="xsd:string" use="required"/>
+   </xsd:complexType>
+   <xsd:complexType name="viGlazingGridType">
+      <xsd:sequence>
+         <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="Type" type="vipickTypeSAS" minOccurs="0"/>
+         <xsd:element name="PreCrashStatus" type="vipickTypeSAS" minOccurs="0"/>
+         <xsd:element name="ImpactDamage" type="vipickTypeSAS" minOccurs="0"/>
+         <xsd:element name="OccupantDamage" type="vipickTypeSAS" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="viIntrusionGridType">
+      <xsd:sequence>
+         <xsd:element name="Row" type="vipickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Position" type="vipickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Area" type="vipickTypeSAS" minOccurs="0"/>
+         <xsd:element name="IntrudedComponent" type="vipickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Comparison" type="vipickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Intruded" type="vipickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Intrusion" type="vipickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Magnitude" type="vipickTypeSAS" minOccurs="0"/>
+         <xsd:element name="CrushDirection" type="vipickTypeSAS" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="viContactGridType">
+      <xsd:sequence>
+         <xsd:element name="Contact" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="Component" type="vipickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Evidence" type="vipickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Confidence" type="vipickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Occupant" minOccurs="0">
+            <xsd:complexType>
+               <xsd:simpleContent>
+						            <xsd:extension base="xsd:string">
+							              <xsd:attribute name="value" type="xsd:string" use="optional"/>
+						            </xsd:extension>
+					          </xsd:simpleContent>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="BodyRegion" type="vipickTypeSAS" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="viEjectionObjectType">
+      <xsd:sequence>
+         <xsd:element name="Type" type="vipickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Area" type="vipickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Medium" type="vipickTypeSAS" minOccurs="0"/>
+         <xsd:element name="MediumStatus" type="vipickTypeSAS" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="viLocationType">
+      <xsd:attribute name="LocationCode" type="xsd:string" use="optional"/>
+      <xsd:attribute name="sasCode" type="xsd:string" use="optional"/>
+   </xsd:complexType>
+   <xsd:complexType name="VehicleInteriorFormsType">
+      <xsd:sequence>
+         <xsd:element ref="VehicleInteriorForm" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute name="caseID" type="xsd:integer" use="required"/>
+      <xsd:attribute name="noNamespaceSchemaLocation" type="xsd:string" use="optional"/>
+   </xsd:complexType>
+   <xsd:complexType name="sspickTypeSAS">
+      <xsd:simpleContent>
+			      <xsd:extension base="xsd:string">
+				        <xsd:attribute name="value" type="xsd:string" use="optional"/>
+				        <xsd:attribute name="sasCode" type="xsd:string" use="optional"/>
+				        <xsd:attribute name="Visible" type="xsd:boolean" use="optional"/>
+				        <xsd:attribute name="Sanitize" type="xsd:boolean" use="optional"/>
+				        <xsd:attribute name="UOM" type="xsd:string" use="optional"/>
+				        <xsd:attribute name="label" type="xsd:string" use="optional"/>
+			      </xsd:extension>
+		    </xsd:simpleContent>
+   </xsd:complexType>
+   <xsd:complexType name="ssOccType">
+      <xsd:sequence>
+         <xsd:element name="Seat" type="ssSeatType" minOccurs="0"/>
+         <xsd:element name="SeatBelt" type="ssSeatBeltType" minOccurs="0"/>
+         <xsd:element name="AirBags" type="ssAirbagType" minOccurs="0"/>
+         <xsd:element name="ChildSeat" type="ssChildSeatType" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="ssOccupantType">
+      <xsd:sequence>
+         <xsd:element name="Age" type="sspickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Height" type="sspickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Weight" type="sspickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Sex" type="sspickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Role" type="sspickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Race" type="sspickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Eye" type="sspickTypeSAS" minOccurs="0"/>
+         <xsd:element name="ChildSeat" type="sspickTypeSAS" minOccurs="0"/>
+         <xsd:element name="AirbagReported" type="sspickTypeSAS" minOccurs="0"/>
+         <xsd:element name="BeltUse" type="sspickTypeSAS" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="ssSeatType">
+      <xsd:sequence>
+         <xsd:element name="SeatObject" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="Row" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Location" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="HeadRestraintType" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="HeadRestraintDamage" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="HeadRestraintActive" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="RolloverProtection" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="SeatType" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="SeatOrientation" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="TrackPosition" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="SeatPerformance" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="IntegratedRestraints" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="SeatBackPriorInclination" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="SeatBackPostInclination" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="AirbagAvailable" type="sspickTypeSAS" minOccurs="0">
+                     <xsd:annotation>
+								                <xsd:documentation>SE,LU</xsd:documentation>
+							              </xsd:annotation>
+                  </xsd:element>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="ssAirbagType">
+      <xsd:sequence>
+         <xsd:element name="AirbagObject" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="Function" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="SeatLocations" minOccurs="0">
+                              <xsd:complexType>
+                                 <xsd:sequence>
+                                    <xsd:element name="SeatLoc" minOccurs="0">
+                                       <xsd:complexType>
+                                          <xsd:attribute name="SeatRow" type="xsd:integer" use="required"/>
+                                          <xsd:attribute name="SeatLocation" type="xsd:integer" use="required"/>
+                                       </xsd:complexType>
+                                    </xsd:element>
+                                 </xsd:sequence>
+                              </xsd:complexType>
+                           </xsd:element>
+                           <xsd:element name="AirbagEvent" type="sspickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="CDCdeployment" type="sspickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="Location" type="sspickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="Status" type="sspickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="Type" type="sspickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="SystemDeployment" type="sspickTypeSAS" minOccurs="0">
+                              <xsd:annotation>
+											                      <xsd:documentation>SE,LU</xsd:documentation>
+										                    </xsd:annotation>
+                           </xsd:element>
+                           <xsd:element name="IndicationOfFailure" type="sspickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="SwitchType" type="sspickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="SwitchStatus" type="sspickTypeSAS" minOccurs="0"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element name="Damage" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="FlapsOpenAtTearPoints" type="sspickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="FlapsDamaged" type="sspickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="AirBagDamaged" type="sspickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="DamageSource" type="sspickTypeSAS" minOccurs="0"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+               </xsd:sequence>
+               <xsd:attribute name="AirbagID" type="xsd:integer"/>
+               <xsd:attribute name="AirbagNum" type="xsd:integer" use="required"/>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="ssChildSeatType">
+      <xsd:sequence>
+         <xsd:element name="ChildSeatOcc" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="OccupantNumber" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Placement" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="ChildPosition" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Make" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Model" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Type" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="MftDate" type="xsd:string" minOccurs="0"/>
+                  <xsd:element name="ModelNum" type="xsd:string" minOccurs="0"/>
+                  <xsd:element name="DataSource" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Orientation" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Harness" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="HarnessUse" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="RetainerClip" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="RetainerClipUse" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Tether" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="TetherUse" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Latch" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="LatchUse" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="BeltRoutingUse" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="LockingClipUse" type="sspickTypeSAS" minOccurs="0"/>
+               </xsd:sequence>
+               <xsd:attribute name="ChildSeatID" type="xsd:integer" use="required"/>
+               <xsd:attribute name="ChildSeatNumber" type="xsd:integer" use="required"/>
+               <xsd:attribute name="SeatLocation" type="xsd:string" use="required"/>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="VehicleOcc" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="BeltRetractorType" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="LatchPlateType" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="LatchAnchor" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="LatchTether" type="sspickTypeSAS" minOccurs="0"/>
+               </xsd:sequence>
+               <xsd:attribute name="ChildSeatID" type="xsd:integer" use="required"/>
+               <xsd:attribute name="ChildSeatNumber" type="xsd:integer" use="required"/>
+               <xsd:attribute name="SeatLocation" type="xsd:string" use="required"/>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="ssManualType">
+      <xsd:sequence>
+         <xsd:element name="Belt" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="Availability" type="sspickTypeSAS" minOccurs="0">
+                     <xsd:annotation>
+								                <xsd:documentation>SE,LU</xsd:documentation>
+							              </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element name="UsedInCrash" type="sspickTypeSAS" minOccurs="0">
+                     <xsd:annotation>
+								                <xsd:documentation>SE,LU</xsd:documentation>
+							              </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element name="Malfunction" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="AnchorageAdjustment" type="sspickTypeSAS" minOccurs="0"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="Components" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="Pretensioner" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="PretensionerDistance" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="PositioningDevice" type="sspickTypeSAS" minOccurs="0"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="ssAutomaticType">
+      <xsd:sequence>
+         <xsd:element name="AutomaticObject" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="AvailabilityFunction" type="sspickTypeSAS" minOccurs="0">
+                     <xsd:annotation>
+								                <xsd:documentation>SE,LU</xsd:documentation>
+							              </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element name="UsedInCrash" type="sspickTypeSAS" minOccurs="0">
+                     <xsd:annotation>
+								                <xsd:documentation>SE,LU</xsd:documentation>
+							              </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element name="Motorized" type="sspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="MalfunctionModes" type="sspickTypeSAS" minOccurs="0"/>
+               </xsd:sequence>
+               <xsd:attribute name="Position" type="xsd:integer" use="required"/>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="ssSeatBeltType">
+      <xsd:sequence>
+         <xsd:element name="Manual" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+               <xsd:complexContent>
+						            <xsd:extension base="ssManualType">
+							              <xsd:attribute name="SeatRow" type="xsd:integer" use="required"/>
+							              <xsd:attribute name="SeatLocation" type="xsd:integer" use="required"/>
+						            </xsd:extension>
+					          </xsd:complexContent>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="Automatic" type="ssAutomaticType" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:element name="SafetyForms" type="SafetyFormsType"/>
+   <xsd:complexType name="SafetyFormsType">
+      <xsd:sequence>
+         <xsd:element name="SafetyForm" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+               <xsd:complexContent>
+						            <xsd:extension base="ssOccType">
+							              <xsd:attribute name="VehicleID" type="xsd:string" use="required"/>
+							              <xsd:attribute name="VehicleNumber" type="xsd:string" use="required"/>
+						            </xsd:extension>
+					          </xsd:complexContent>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+      <xsd:attribute name="caseID" type="xsd:string" use="optional"/>
+      <xsd:attribute name="noNamespaceSchemaLocation" type="xsd:string" use="optional"/>
+   </xsd:complexType>
+   <xsd:complexType name="occpickTypeSAS">
+      <xsd:simpleContent>
+			      <xsd:extension base="xsd:string">
+				        <xsd:attribute name="value" type="xsd:string" use="optional"/>
+				        <xsd:attribute name="sasCode" type="xsd:string" use="optional"/>
+				        <xsd:attribute name="UOM" type="xsd:string" use="optional"/>
+				        <xsd:attribute name="Visible" type="xsd:boolean" use="optional"/>
+				        <xsd:attribute name="Sanitize" type="xsd:boolean" use="optional"/>
+				        <xsd:attribute name="label" type="xsd:string" use="optional"/>
+			      </xsd:extension>
+		    </xsd:simpleContent>
+   </xsd:complexType>
+   <xsd:complexType name="occOccType">
+      <xsd:sequence>
+         <xsd:element name="Occupant" type="occOccupantType" minOccurs="0"/>
+         <xsd:element name="Ejection" type="occEjectionType" minOccurs="0"/>
+         <xsd:element name="Entrapment" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="Entrapment" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Mobility" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="EntrapmentComments" type="xsd:string" minOccurs="0"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="Seat" type="occSeatType" minOccurs="0"/>
+         <xsd:element name="Airbag" type="occAirbagType" minOccurs="0"/>
+         <xsd:element name="ChildSeat" type="occChildSeatType" minOccurs="0"/>
+         <xsd:element name="SeatBelt" type="occSeatBeltType" minOccurs="0"/>
+         <xsd:element name="Injury" type="occInjuryType" minOccurs="0"/>
+         <xsd:element name="InjuryCodes" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="Injuries" type="occInjuriesType" minOccurs="0"/>
+                  <xsd:element name="VitalSigns" type="occVitalSignsType" minOccurs="0"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="occIntrusionType">
+      <xsd:sequence>
+         <xsd:element name="IntrusionObject" maxOccurs="unbounded" minOccurs="0">
+            <xsd:complexType>
+               <xsd:complexContent>
+						            <xsd:extension base="occIntrusionGridType">
+							              <xsd:attribute name="Row" type="xsd:string" use="required"/>
+							              <xsd:attribute name="Position" type="xsd:string" use="required"/>
+						            </xsd:extension>
+					          </xsd:complexContent>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="occEjectionType">
+      <xsd:sequence>
+         <xsd:element name="EjectionObject" type="occEjectionObjectType" minOccurs="0"
+                      maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="occIntrusionGridType">
+      <xsd:sequence>
+         <xsd:element name="Area" type="occpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="IntrudedComponent" type="occpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Comparison" type="occpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Intruded" type="occpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Intrusion" type="occpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Magnitude" type="occpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="CrushDirection" type="occpickTypeSAS" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="occEjectionObjectType">
+      <xsd:sequence>
+         <xsd:element name="Type" type="occpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Area" type="occpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Medium" type="occpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="MediumStatus" type="occpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Comment" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="EjectionNumber" type="xsd:integer" use="required"/>
+      <xsd:attribute name="OccNumber" type="xsd:string" use="required"/>
+   </xsd:complexType>
+   <xsd:complexType name="occOccupantType">
+      <xsd:sequence>
+         <xsd:element name="Age" type="occpickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE,LU</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="Height" type="occpickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE,LU</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="Weight" type="occpickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE,LU</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="Sex" type="occpickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE,LU</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="FetalMortality" type="occpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Role" type="occpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Race" type="occpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Ethnicity" type="occpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="EyeWear" type="occpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="PoliceReportedAirBagAvail-Function" type="occpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="PoliceReportedBeltUse" type="occpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="ChildSeat" type="occpickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE,LU</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="PoliceAccidentReportKABCOU" type="occpickTypeSAS" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>Police Accident Report KABCO</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="occEntrapmentType">
+      <xsd:sequence>
+         <xsd:element name="Type" type="occpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="OccupantMobility" type="occpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="IntrusionGreater2cm" type="occpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Comment" type="xsd:string" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="occSeatType">
+      <xsd:sequence>
+         <xsd:element name="SeatGeneral" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="Row" type="occpickTypeSAS" minOccurs="0">
+                     <xsd:annotation>
+								                <xsd:documentation>SE,LU</xsd:documentation>
+							              </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element name="Location" type="occpickTypeSAS" minOccurs="0">
+                     <xsd:annotation>
+								                <xsd:documentation>SE,LU</xsd:documentation>
+							              </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element name="Posture" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="SeatType" type="occpickTypeSAS" minOccurs="0"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="SeatComponents" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="HeadRestraintType" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="HeadRestraintDamage" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="HeadRestraintActive" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="RolloverProtection" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="SeatOrientation" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="TrackPosition" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="SeatPerformance" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="IntegratedRestraints" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="SeatBackPriorInclination" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="SeatBackPostInclination" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="AirBagAvailable" type="occpickTypeSAS" minOccurs="0"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="occAirbagType">
+      <xsd:sequence>
+         <xsd:element name="AirbagObject" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="Function" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="Location" type="occpickTypeSAS" minOccurs="0">
+                              <xsd:annotation>
+											                      <xsd:documentation>SE,LU</xsd:documentation>
+										                    </xsd:annotation>
+                           </xsd:element>
+                           <xsd:element name="Status" type="occpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="Type" type="occpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="SystemDeployment" type="occpickTypeSAS" minOccurs="0">
+                              <xsd:annotation>
+											                      <xsd:documentation>SE,LU</xsd:documentation>
+										                    </xsd:annotation>
+                           </xsd:element>
+                           <xsd:element name="IndicationFailure" type="occpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="SwitchType" type="occpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="SwitchStatus" type="occpickTypeSAS" minOccurs="0"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element name="Damage" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="FlapsOpen" type="occpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="FlapsDamaged" type="occpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="AirBagDamaged" type="occpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="DamageSource" type="occpickTypeSAS" minOccurs="0"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element name="Evaluation" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="VehiclePreviousCrashes" type="occpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="PriorMaintenance" type="occpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="AirBagEvent" type="occpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="CDCDeployment" type="occpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="DeltaV" minOccurs="0" maxOccurs="unbounded">
+                              <xsd:complexType>
+                                 <xsd:sequence>
+                                    <xsd:element name="PDOF" type="occpickTypeSAS" minOccurs="0"/>
+                                    <xsd:element name="CDC" type="xsd:string" minOccurs="0"/>
+                                    <xsd:element name="Total" type="occpickTypeSAS" minOccurs="0"/>
+                                    <xsd:element name="Longitudinal" type="occpickTypeSAS" minOccurs="0"/>
+                                    <xsd:element name="Lateral" type="occpickTypeSAS" minOccurs="0"/>
+                                    <xsd:element name="Energy" type="occpickTypeSAS" minOccurs="0"/>
+                                    <xsd:element name="Impact" type="occpickTypeSAS" minOccurs="0"/>
+                                    <xsd:element name="Barrier" type="occpickTypeSAS" minOccurs="0"/>
+                                    <xsd:element name="Estimated" type="occpickTypeSAS" minOccurs="0"/>
+                                    <xsd:element name="Rank" type="xsd:string" minOccurs="0"/>
+                                 </xsd:sequence>
+                                 <xsd:attribute name="EventNumber" type="xsd:integer" use="required"/>
+                              </xsd:complexType>
+                           </xsd:element>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+               </xsd:sequence>
+               <xsd:attribute name="SeatRow" type="xsd:string" use="required"/>
+               <xsd:attribute name="SeatLocation" type="xsd:string" use="required"/>
+               <xsd:attribute name="AirbagID" type="xsd:string" use="required"/>
+               <xsd:attribute name="AirbagNum" type="xsd:string" use="required"/>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="occChildSeatType">
+      <xsd:sequence>
+         <xsd:element name="ChildSeatOcc" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="OccupantNumber" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Placement" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="ChildPosition" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Make" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Model" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Type" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="MftDate" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="ModelNum" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="DataSource" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Orientation" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Harness" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="HarnessUse" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="RetainerClip" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="RetainerClipUse" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Tether" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="TetherUse" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Latch" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="LatchUse" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="BeltRoutingUse" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="LockingClipUse" type="occpickTypeSAS" minOccurs="0"/>
+               </xsd:sequence>
+               <xsd:attribute name="ChildSeatID" type="xsd:integer" use="required"/>
+               <xsd:attribute name="ChildSeatNumber" type="xsd:integer" use="required"/>
+               <xsd:attribute name="SeatLocation" type="xsd:string" use="required"/>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="VehicleOcc" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="BeltRetractorType" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="LatchPlateType" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="LatchAnchor" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="LatchTether" type="occpickTypeSAS" minOccurs="0"/>
+               </xsd:sequence>
+               <xsd:attribute name="ChildSeatID" type="xsd:integer" use="required"/>
+               <xsd:attribute name="ChildSeatNumber" type="xsd:integer" use="required"/>
+               <xsd:attribute name="SeatLocation" type="xsd:string" use="required"/>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="occManualType">
+      <xsd:sequence>
+         <xsd:element name="Belt" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="Availability" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="UsedInCrash" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="LapBeltPosition" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="ShoulderBeltPosition" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Malfunction" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="AnchorageAdjustment" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="SourceOfBeltUse" type="occpickTypeSAS" minOccurs="0"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="Components" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="BeltPretensioner" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="Pretensioner" type="occpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="PretensionerDistance" type="occpickTypeSAS" minOccurs="0"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element name="BeltPositioning" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="Presence" type="occpickTypeSAS" minOccurs="0"/>
+                           <xsd:element name="Use" type="occpickTypeSAS" minOccurs="0"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="occAutomaticType">
+      <xsd:sequence>
+         <xsd:element name="AvailabilityFunction" type="occpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="UsedInCrash" type="occpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Motorized" type="occpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="LapBeltPosition" type="occpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="ShoulderBeltPosition" type="occpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Malfunction" type="occpickTypeSAS" minOccurs="0"/>
+         <xsd:element name="SourceOfBeltUse" type="occpickTypeSAS" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="occSeatBeltType">
+      <xsd:sequence>
+         <xsd:element name="ManualBelt" type="occManualType" minOccurs="0"/>
+         <xsd:element name="AutomaticBelt" type="occAutomaticType" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="occVitalSignsType">
+      <xsd:sequence>
+         <xsd:element name="VitalSignsSample" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="DaysSince" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Date" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:simpleContent>
+									                  <xsd:extension base="xsd:string">
+										                    <xsd:attribute name="Visible" type="xsd:boolean" use="optional"/>
+										                    <xsd:attribute name="Sanitize" type="xsd:boolean" use="optional"/>
+									                  </xsd:extension>
+								                </xsd:simpleContent>
+                     </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element name="Time" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:simpleContent>
+									                  <xsd:extension base="xsd:string">
+										                    <xsd:attribute name="Visible" type="xsd:boolean" use="optional"/>
+									                  </xsd:extension>
+								                </xsd:simpleContent>
+                     </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element name="Pulse" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Systolic" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Diastolic" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="RespiratoryRate" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Source" type="occpickTypeSAS" minOccurs="0"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="occInjuriesType">
+      <xsd:sequence>
+         <xsd:element name="InjuryCode" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="SourceOfData" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="AISCode" type="occpickTypeSAS" minOccurs="0">
+                     <xsd:annotation>
+								                <xsd:documentation>SE,LU</xsd:documentation>
+							              </xsd:annotation>
+                  </xsd:element>
+                  <xsd:element name="AISSeverity" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Aspect" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="AspectObject" type="occpickTypeSAS" minOccurs="0"/>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+                  <xsd:element name="Description" type="xsd:string" minOccurs="0"/>
+                  <xsd:element name="InjurySource" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="ConfidenceLevel" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="DirectIndirectInjury" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="DirectIntrusion" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="IndirectIntrusion" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="AirBagRelated" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Rank" type="occpickTypeSAS" minOccurs="0"/>
+               </xsd:sequence>
+               <xsd:attribute name="InjuryNo" type="xsd:integer" use="optional"/>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="occInjuryType">
+      <xsd:sequence>
+         <xsd:element name="Treatment" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="PoliceAccidentReportKABCO" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Mortality" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Treatment" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="InitialFacility" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="HospitalStay" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="WorkDaysLost" type="occpickTypeSAS" minOccurs="0"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="Medical" minOccurs="0">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="TimeToDeath" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="NumberOfInjuries" type="xsd:integer" minOccurs="0"/>
+                  <xsd:element name="GCS" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Blood" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Abg" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="KABCOU" type="occpickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="CauseOfDeath" minOccurs="0">
+                     <xsd:complexType>
+                        <xsd:sequence>
+                           <xsd:element name="Injury" minOccurs="0" maxOccurs="unbounded">
+                              <xsd:complexType>
+                                 <xsd:sequence>
+                                    <xsd:element name="Order" type="xsd:string" minOccurs="0"/>
+                                    <xsd:element name="Injury" type="occpickTypeSAS" minOccurs="0"/>
+                                 </xsd:sequence>
+                              </xsd:complexType>
+                           </xsd:element>
+                        </xsd:sequence>
+                     </xsd:complexType>
+                  </xsd:element>
+               </xsd:sequence>
+               <xsd:attribute name="Blood"/>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:element name="OccupantForms" type="OccupantFormsType"/>
+   <xsd:complexType name="occDerivedType">
+      <xsd:sequence>
+         <xsd:element name="CASEID" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="VEHICLEID" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="OCCUPANTID" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="AIS" type="xsd:string" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE,LU</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="ISS" type="xsd:string" minOccurs="0">
+            <xsd:annotation>
+					          <xsd:documentation>SE,LU</xsd:documentation>
+				        </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="SEATLOCID" type="xsd:string" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="Visible" type="xsd:boolean" use="optional"/>
+      <xsd:attribute name="Sanitize" type="xsd:boolean" use="optional"/>
+   </xsd:complexType>
+   <xsd:complexType name="OccupantFormsType">
+      <xsd:sequence>
+         <xsd:element name="OccupantForm" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+               <xsd:complexContent>
+						            <xsd:extension base="occOccType">
+							              <xsd:attribute name="VehicleNumber" type="xsd:integer" use="required"/>
+							              <xsd:attribute name="OccupantNumber" type="xsd:integer" use="required"/>
+							              <xsd:attribute name="OccupantID" type="xsd:string" use="required"/>
+						            </xsd:extension>
+					          </xsd:complexContent>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+      <xsd:attribute name="caseID" type="xsd:integer" use="required"/>
+      <xsd:attribute name="noNamespaceSchemaLocation" type="xsd:string" use="optional"/>
+   </xsd:complexType>
+   <xsd:element name="EMSForm" type="EMSFormType"/>
+   <xsd:complexType name="emspickTypeSAS">
+      <xsd:simpleContent>
+			      <xsd:extension base="xsd:string">
+				        <xsd:attribute name="value" type="xsd:string" use="optional"/>
+				        <xsd:attribute name="sasCode" type="xsd:string" use="optional"/>
+				        <xsd:attribute name="Visible" type="xsd:boolean" use="optional"/>
+				        <xsd:attribute name="Sanitized" type="xsd:boolean" use="optional"/>
+				        <xsd:attribute name="UOM" type="xsd:string" use="optional"/>
+				        <xsd:attribute name="label" type="xsd:string" use="optional"/>
+			      </xsd:extension>
+		    </xsd:simpleContent>
+   </xsd:complexType>
+   <xsd:complexType name="emsEMSVehicleType"/>
+   <xsd:complexType name="emsVehicleType">
+      <xsd:attribute name="EjectionNumber" type="xsd:int"/>
+      <xsd:attribute name="OccNumber" type="xsd:int"/>
+   </xsd:complexType>
+   <xsd:complexType name="emsVehicleObjectType">
+      <xsd:sequence>
+         <xsd:element name="AgencyType" type="emspickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Type" type="emspickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Mode" type="emspickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Notified" type="emspickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Arrived" type="emspickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Departed" type="emspickTypeSAS" minOccurs="0"/>
+         <xsd:element name="ArrMedical" type="emspickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Care" type="emsCareType" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="emsOccupantType">
+      <xsd:sequence>
+         <xsd:element name="Age" type="emspickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Height" type="emspickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Weight" type="emspickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Sex" type="emspickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Role" type="emspickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Race" type="emspickTypeSAS" minOccurs="0"/>
+         <xsd:element name="Eye" type="emspickTypeSAS" minOccurs="0"/>
+         <xsd:element name="ChildSeat" type="emspickTypeSAS" minOccurs="0"/>
+         <xsd:element name="AirbagReported" type="emspickTypeSAS" minOccurs="0"/>
+         <xsd:element name="BeltUse" type="emspickTypeSAS" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="emsCareType">
+      <xsd:sequence>
+         <xsd:element name="CareOccupant" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="Care" type="emspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Note" type="xsd:string" minOccurs="0"/>
+                  <xsd:element name="VitalSigns" type="emsVitalSignsType" minOccurs="0"/>
+               </xsd:sequence>
+               <xsd:attribute name="VehicleNumber" type="xsd:string"/>
+               <xsd:attribute name="OccupantNumber" type="xsd:string"/>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="emsVitalSignsType">
+      <xsd:sequence>
+         <xsd:element name="VitalSignsSample" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="DaysSince" type="xsd:integer" minOccurs="0"/>
+                  <xsd:element name="Time" type="xsd:string" minOccurs="0"/>
+                  <xsd:element name="Pulse" type="emspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Systolic" type="emspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="Diastolic" type="emspickTypeSAS" minOccurs="0"/>
+                  <xsd:element name="RespiratoryRate" type="emspickTypeSAS" minOccurs="0"/>
+               </xsd:sequence>
+               <xsd:attribute name="VehicleNumber" type="xsd:integer"/>
+               <xsd:attribute name="OccupantNumber" type="xsd:integer"/>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="EMSFormType">
+      <xsd:complexContent>
+			      <xsd:extension base="emsEMSVehicleType">
+				        <xsd:sequence>
+					          <xsd:element name="EMSvehicle" minOccurs="0" maxOccurs="unbounded">
+						            <xsd:complexType>
+							              <xsd:complexContent>
+								                <xsd:extension base="emsVehicleObjectType">
+									                  <xsd:attribute name="EMSvehicleNumber" type="xsd:string" use="required"/>
+									                  <xsd:attribute name="EMSvehID" type="xsd:integer" use="required"/>
+								                </xsd:extension>
+							              </xsd:complexContent>
+						            </xsd:complexType>
+					          </xsd:element>
+				        </xsd:sequence>
+				        <xsd:attribute name="caseID" type="xsd:integer" use="required"/>
+				        <xsd:attribute name="noNamespaceSchemaLocation" type="xsd:string" use="optional"/>
+			      </xsd:extension>
+		    </xsd:complexContent>
+   </xsd:complexType>
+   <xsd:element name="Aends" type="SketchType"/>
+   <xsd:complexType name="AirbagType">
+      <xsd:sequence>
+         <xsd:element ref="Sketch1" minOccurs="0"/>
+         <xsd:element ref="Sketch2" minOccurs="0"/>
+         <xsd:element ref="Sketch3" minOccurs="0"/>
+         <xsd:element ref="Sketch4" minOccurs="0"/>
+         <xsd:element ref="Sketch5" minOccurs="0"/>
+         <xsd:element ref="Sketch6" minOccurs="0"/>
+         <xsd:element ref="Sketch7" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:element name="Airbagsketch" type="SketchType"/>
+   <xsd:element name="Asides" type="SketchType"/>
+   <xsd:element name="Atop" type="SketchType"/>
+   <xsd:element name="Back" type="ImageType"/>
+   <xsd:element name="Backleftoblique" type="ImageType"/>
+   <xsd:element name="Backrightoblique" type="ImageType"/>
+   <xsd:element name="Bends" type="SketchType"/>
+   <xsd:element name="Brainb" type="SketchType"/>
+   <xsd:element name="Braint" type="SketchType"/>
+   <xsd:element name="Bsides" type="SketchType"/>
+   <xsd:element name="Btop" type="SketchType"/>
+   <xsd:element name="Cends" type="SketchType"/>
+   <xsd:complexType name="CrashsceneType">
+      <xsd:sequence>
+         <xsd:element name="Vehicle" type="ImageType" minOccurs="0"/>
+         <xsd:element name="Vehicleapproach-" type="ImageType" minOccurs="0"/>
+         <xsd:element name="Vehiclepointofimpact-" type="ImageType" minOccurs="0"/>
+         <xsd:element name="Vehiclepathtofinalrest-" type="ImageType" minOccurs="0"/>
+         <xsd:element name="Lookback" type="ImageType" minOccurs="0"/>
+         <xsd:element name="Lookbackbeyondfinalresttoimpact-" type="ImageType" minOccurs="0"/>
+         <xsd:element name="Lookbackfromimpacttoprecrash-" type="ImageType" minOccurs="0"/>
+         <xsd:element name="Miscellaneousviews" type="ImageType" minOccurs="0"/>
+         <xsd:element ref="Easydrawscenesketch" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="CrashtypeType">
+      <xsd:sequence>
+         <xsd:element name="resource" type="resourceType" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:element name="Csides" type="SketchType"/>
+   <xsd:element name="Ctop" type="SketchType"/>
+   <xsd:element name="Dends" type="SketchType"/>
+   <xsd:complexType name="DiagramType">
+      <xsd:sequence>
+         <xsd:element ref="Intrusion" minOccurs="0"/>
+         <xsd:element ref="Intrusion2" minOccurs="0"/>
+         <xsd:element ref="Vehicleinteriorsketch2" minOccurs="0"/>
+         <xsd:element ref="Steeringsketch" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:element name="Dsides" type="SketchType"/>
+   <xsd:element name="Dtop" type="SketchType"/>
+   <xsd:element name="Easydrawscenesketch" type="ImageType"/>
+   <xsd:element name="Eends" type="SketchType"/>
+   <xsd:element name="Esides" type="SketchType"/>
+   <xsd:element name="Etop" type="SketchType"/>
+   <xsd:complexType name="ExemplarType">
+      <xsd:sequence>
+         <xsd:element name="Exemplar" type="ImageType" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="VehicleNumber" type="xsd:string"/>
+   </xsd:complexType>
+   <xsd:complexType name="ExteriorvehicleType">
+      <xsd:sequence>
+         <xsd:element ref="Exteriorvehicledamagesketch" minOccurs="0"/>
+         <xsd:element ref="Atop" minOccurs="0"/>
+         <xsd:element ref="Asides" minOccurs="0"/>
+         <xsd:element ref="Aends" minOccurs="0"/>
+         <xsd:element ref="Btop" minOccurs="0"/>
+         <xsd:element ref="Bsides" minOccurs="0"/>
+         <xsd:element ref="Bends" minOccurs="0"/>
+         <xsd:element ref="Ctop" minOccurs="0"/>
+         <xsd:element ref="Csides" minOccurs="0"/>
+         <xsd:element ref="Cends" minOccurs="0"/>
+         <xsd:element ref="Dtop" minOccurs="0"/>
+         <xsd:element ref="Dsides" minOccurs="0"/>
+         <xsd:element ref="Dends" minOccurs="0"/>
+         <xsd:element ref="Etop" minOccurs="0"/>
+         <xsd:element ref="Esides" minOccurs="0"/>
+         <xsd:element ref="Eends" minOccurs="0"/>
+         <xsd:element ref="Ftop" minOccurs="0"/>
+         <xsd:element ref="Fsides" minOccurs="0"/>
+         <xsd:element ref="Fends" minOccurs="0"/>
+         <xsd:element ref="Gtop" minOccurs="0"/>
+         <xsd:element ref="Gsides" minOccurs="0"/>
+         <xsd:element ref="Gends" minOccurs="0"/>
+         <xsd:element ref="Htop" minOccurs="0"/>
+         <xsd:element ref="Hsides" minOccurs="0"/>
+         <xsd:element ref="Hends" minOccurs="0"/>
+         <xsd:element ref="Itop" minOccurs="0"/>
+         <xsd:element ref="Isides" minOccurs="0"/>
+         <xsd:element ref="Iends" minOccurs="0"/>
+         <xsd:element ref="Jtop" minOccurs="0"/>
+         <xsd:element ref="Jsides" minOccurs="0"/>
+         <xsd:element ref="Jends" minOccurs="0"/>
+         <xsd:element ref="Ktop" minOccurs="0"/>
+         <xsd:element ref="Ksides" minOccurs="0"/>
+         <xsd:element ref="Kends" minOccurs="0"/>
+         <xsd:element ref="Ltop" minOccurs="0"/>
+         <xsd:element ref="Lsides" minOccurs="0"/>
+         <xsd:element ref="Lends" minOccurs="0"/>
+         <xsd:element ref="Mtop" minOccurs="0"/>
+         <xsd:element ref="Msides" minOccurs="0"/>
+         <xsd:element ref="Mends" minOccurs="0"/>
+         <xsd:element ref="Ntop" minOccurs="0"/>
+         <xsd:element ref="Nsides" minOccurs="0"/>
+         <xsd:element ref="Nends" minOccurs="0"/>
+         <xsd:element ref="Otop" minOccurs="0"/>
+         <xsd:element ref="Osides" minOccurs="0"/>
+         <xsd:element ref="Oends" minOccurs="0"/>
+         <xsd:element ref="Ptop" minOccurs="0"/>
+         <xsd:element ref="Psides" minOccurs="0"/>
+         <xsd:element ref="Pends" minOccurs="0"/>
+         <xsd:element ref="Qtop" minOccurs="0"/>
+         <xsd:element ref="Qsides" minOccurs="0"/>
+         <xsd:element ref="Qends" minOccurs="0"/>
+         <xsd:element ref="Rtop" minOccurs="0"/>
+         <xsd:element ref="Rsides" minOccurs="0"/>
+         <xsd:element ref="Rends" minOccurs="0"/>
+         <xsd:element ref="top" minOccurs="0"/>
+         <xsd:element ref="sides" minOccurs="0"/>
+         <xsd:element ref="ends" minOccurs="0"/>
+         <xsd:element ref="Smallcar2doortop" minOccurs="0"/>
+         <xsd:element ref="Smallcar2doorsides" minOccurs="0"/>
+         <xsd:element ref="Smallcar2doorends" minOccurs="0"/>
+         <xsd:element ref="Smallcar4doortop" minOccurs="0"/>
+         <xsd:element ref="Smallcar4doorsides" minOccurs="0"/>
+         <xsd:element ref="Smallcar4doorends" minOccurs="0"/>
+         <xsd:element ref="Smallcarconvertibletop" minOccurs="0"/>
+         <xsd:element ref="Smallcarconvertiblesides" minOccurs="0"/>
+         <xsd:element ref="Smallcarconvertibleends" minOccurs="0"/>
+         <xsd:element ref="Largecartop" minOccurs="0"/>
+         <xsd:element ref="Largecarsides" minOccurs="0"/>
+         <xsd:element ref="Largecarends" minOccurs="0"/>
+         <xsd:element ref="Boxvantop" minOccurs="0"/>
+         <xsd:element ref="Boxvansides" minOccurs="0"/>
+         <xsd:element ref="Boxvanends" minOccurs="0"/>
+         <xsd:element ref="Minivantop" minOccurs="0"/>
+         <xsd:element ref="Minivansides" minOccurs="0"/>
+         <xsd:element ref="Minivanends" minOccurs="0"/>
+         <xsd:element ref="Suv2doortop" minOccurs="0"/>
+         <xsd:element ref="Suv2doorsides" minOccurs="0"/>
+         <xsd:element ref="Suv2doorends" minOccurs="0"/>
+         <xsd:element ref="Suv4doortop" minOccurs="0"/>
+         <xsd:element ref="Suv4doorsides" minOccurs="0"/>
+         <xsd:element ref="Suv4doorends" minOccurs="0"/>
+         <xsd:element ref="Pickup2doortop" minOccurs="0"/>
+         <xsd:element ref="Pickup2doorsides" minOccurs="0"/>
+         <xsd:element ref="Pickup2doorends" minOccurs="0"/>
+         <xsd:element ref="Pickup4doortop" minOccurs="0"/>
+         <xsd:element ref="Pickup4doorsides" minOccurs="0"/>
+         <xsd:element ref="Pickup4doorends" minOccurs="0"/>
+         <xsd:element ref="Pickupextendedcabtop" minOccurs="0"/>
+         <xsd:element ref="Pickupextendedcabsides" minOccurs="0"/>
+         <xsd:element ref="Pickupextendedcabends" minOccurs="0"/>
+         <xsd:element ref="Stationwagontop" minOccurs="0"/>
+         <xsd:element ref="Stationwagonsides" minOccurs="0"/>
+         <xsd:element ref="Stationwagonends" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:element name="Exteriorvehicledamagesketch" type="SketchType"/>
+   <xsd:element name="Fends" type="SketchType"/>
+   <xsd:element name="Front" type="ImageType"/>
+   <xsd:element name="Frontleftoblique" type="ImageType"/>
+   <xsd:element name="Frontrightoblique" type="ImageType"/>
+   <xsd:element name="Fsides" type="SketchType"/>
+   <xsd:element name="Ftop" type="SketchType"/>
+   <xsd:element name="Fuelsystem" type="ImageType"/>
+   <xsd:element name="Gends" type="SketchType"/>
+   <xsd:element name="Gsides" type="SketchType"/>
+   <xsd:element name="Gtop" type="SketchType"/>
+   <xsd:element name="Hends" type="SketchType"/>
+   <xsd:element name="Hsides" type="SketchType"/>
+   <xsd:element name="Htop" type="SketchType"/>
+   <xsd:element name="IMGForm">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="SceneDrawings" type="SceneDrawingsType" minOccurs="0"/>
+            <xsd:element name="Crashscene" type="CrashsceneType" minOccurs="0"/>
+            <xsd:element name="Vehicle" type="VehicleType" maxOccurs="unbounded" minOccurs="0"/>
+            <xsd:element name="Onscene" type="OnsceneType" minOccurs="0"/>
+            <xsd:element name="Exemplar" type="ExemplarType" minOccurs="0"/>
+            <xsd:element name="Airbag" type="AirbagType" minOccurs="0"/>
+            <xsd:element name="Diagram" type="DiagramType" minOccurs="0"/>
+            <xsd:element name="Crashtype" type="CrashtypeType" minOccurs="0"/>
+            <xsd:element name="Exteriorvehicle" type="ExteriorvehicleType" minOccurs="0"/>
+            <xsd:element name="Injury" type="InjuryType" minOccurs="0"/>
+         </xsd:sequence>
+         <xsd:attribute name="caseID" type="xsd:int" use="required"/>
+         <xsd:attribute name="noNamespaceSchemaLocation" type="xsd:string" use="optional"/>
+      </xsd:complexType>
+   </xsd:element>
+   <xsd:element name="Iends" type="SketchType"/>
+   <xsd:complexType name="InjuryType">
+      <xsd:sequence>
+         <xsd:element ref="Airbagsketch" minOccurs="0"/>
+         <xsd:element ref="Brainb" minOccurs="0"/>
+         <xsd:element ref="Braint" minOccurs="0"/>
+         <xsd:element ref="Orga" minOccurs="0"/>
+         <xsd:element ref="Orgp" minOccurs="0"/>
+         <xsd:element ref="Skela" minOccurs="0"/>
+         <xsd:element ref="Skelp" minOccurs="0"/>
+         <xsd:element ref="Skina" minOccurs="0"/>
+         <xsd:element ref="Skinp" minOccurs="0"/>
+         <xsd:element ref="Skult" minOccurs="0"/>
+         <xsd:element ref="Skurt" minOccurs="0"/>
+         <xsd:element ref="Skulant" minOccurs="0"/>
+         <xsd:element ref="Softtissuefull" minOccurs="0"/>
+         <xsd:element ref="Skeletalfull" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:element name="Int1strow-childrestraint" type="ImageType"/>
+   <xsd:element name="Int1strow-driverairbag" type="ImageType"/>
+   <xsd:element name="Int1strow-otherairbag" type="ImageType"/>
+   <xsd:element name="Int1strow-passengerairbag" type="ImageType"/>
+   <xsd:element name="Int2ndrow-airbag" type="ImageType"/>
+   <xsd:element name="Int2ndrow-childrestraint" type="ImageType"/>
+   <xsd:element name="Interior-childrestraint" type="ImageType"/>
+   <xsd:element name="Interior1strow" type="ImageType"/>
+   <xsd:element name="Interior2ndrow" type="ImageType"/>
+   <xsd:element name="Interiorotherrow" type="ImageType"/>
+   <xsd:element name="Intrusion" type="SketchType"/>
+   <xsd:element name="Intrusion2" type="SketchType"/>
+   <xsd:element name="Isides" type="SketchType"/>
+   <xsd:element name="Itop" type="SketchType"/>
+   <xsd:element name="Jends" type="SketchType"/>
+   <xsd:element name="Jsides" type="SketchType"/>
+   <xsd:element name="Jtop" type="SketchType"/>
+   <xsd:element name="Kends" type="SketchType"/>
+   <xsd:element name="Ksides" type="SketchType"/>
+   <xsd:element name="Ktop" type="SketchType"/>
+   <xsd:element name="Left" type="ImageType"/>
+   <xsd:element name="Lends" type="SketchType"/>
+   <xsd:element name="Lsides" type="SketchType"/>
+   <xsd:element name="Ltop" type="SketchType"/>
+   <xsd:element name="Mends" type="SketchType"/>
+   <xsd:element name="Miscellaneous" type="ImageType"/>
+   <xsd:element name="Msides" type="SketchType"/>
+   <xsd:element name="Mtop" type="SketchType"/>
+   <xsd:element name="Nends" type="SketchType"/>
+   <xsd:element name="Nsides" type="SketchType"/>
+   <xsd:element name="Ntop" type="SketchType"/>
+   <xsd:element name="Oends" type="SketchType"/>
+   <xsd:complexType name="OnsceneType">
+      <xsd:sequence>
+         <xsd:element name="Onscene" type="ImageType" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="VehicleNumber" type="xsd:string"/>
+   </xsd:complexType>
+   <xsd:element name="Orga" type="SketchType"/>
+   <xsd:element name="Orgp" type="SketchType"/>
+   <xsd:element name="Osides" type="SketchType"/>
+   <xsd:element name="Otop" type="SketchType"/>
+   <xsd:element name="Pends" type="SketchType"/>
+   <xsd:element name="Psides" type="SketchType"/>
+   <xsd:element name="Ptop" type="SketchType"/>
+   <xsd:element name="Qends" type="SketchType"/>
+   <xsd:element name="Qsides" type="SketchType"/>
+   <xsd:element name="Qtop" type="SketchType"/>
+   <xsd:element name="Rends" type="SketchType"/>
+   <xsd:element name="Right" type="ImageType"/>
+   <xsd:element name="Rsides" type="SketchType"/>
+   <xsd:element name="Rtop" type="SketchType"/>
+   <xsd:complexType name="SceneDrawingsType">
+      <xsd:sequence>
+         <xsd:element name="scene" type="sceneType" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:element name="Skela" type="SketchType"/>
+   <xsd:element name="Skeletalfull" type="SketchType"/>
+   <xsd:element name="Skelp" type="SketchType"/>
+   <xsd:element name="Sketch1" type="SketchType"/>
+   <xsd:element name="Sketch2" type="SketchType"/>
+   <xsd:element name="Sketch3" type="SketchType"/>
+   <xsd:element name="Sketch4" type="SketchType"/>
+   <xsd:element name="Sketch5" type="SketchType"/>
+   <xsd:element name="Sketch6" type="SketchType"/>
+   <xsd:element name="Sketch7" type="SketchType"/>
+   <xsd:element name="Skina" type="SketchType"/>
+   <xsd:element name="Skinp" type="SketchType"/>
+   <xsd:element name="Skulant" type="SketchType"/>
+   <xsd:element name="Skult" type="SketchType"/>
+   <xsd:element name="Skurt" type="SketchType"/>
+   <xsd:element name="Softtissuefull" type="SketchType"/>
+   <xsd:element name="Steeringsketch" type="SketchType"/>
+   <xsd:element name="Top" type="ImageType"/>
+   <xsd:element name="Undercarriage" type="ImageType"/>
+   <xsd:complexType name="VehicleType">
+      <xsd:sequence>
+         <xsd:element ref="Front" minOccurs="0"/>
+         <xsd:element ref="Frontleftoblique" minOccurs="0"/>
+         <xsd:element ref="Left" minOccurs="0"/>
+         <xsd:element ref="Backleftoblique" minOccurs="0"/>
+         <xsd:element ref="Back" minOccurs="0"/>
+         <xsd:element ref="Backrightoblique" minOccurs="0"/>
+         <xsd:element ref="Right" minOccurs="0"/>
+         <xsd:element ref="Frontrightoblique" minOccurs="0"/>
+         <xsd:element ref="Top" minOccurs="0"/>
+         <xsd:element ref="Undercarriage" minOccurs="0"/>
+         <xsd:element ref="Fuelsystem" minOccurs="0"/>
+         <xsd:element ref="Interior1strow" minOccurs="0"/>
+         <xsd:element ref="Int1strow-driverairbag" minOccurs="0"/>
+         <xsd:element ref="Int1strow-passengerairbag" minOccurs="0"/>
+         <xsd:element ref="Int1strow-otherairbag" minOccurs="0"/>
+         <xsd:element ref="Int1strow-childrestraint" minOccurs="0"/>
+         <xsd:element ref="Interior2ndrow" minOccurs="0"/>
+         <xsd:element ref="Int2ndrow-airbag" minOccurs="0"/>
+         <xsd:element ref="Int2ndrow-childrestraint" minOccurs="0"/>
+         <xsd:element ref="Interiorotherrow" minOccurs="0"/>
+         <xsd:element ref="Interior-childrestraint" minOccurs="0"/>
+         <xsd:element ref="Vehicleidentifiers" minOccurs="0"/>
+         <xsd:element ref="Miscellaneous" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="VehicleNumber" type="xsd:string" use="optional"/>
+   </xsd:complexType>
+   <xsd:complexType name="ImageType">
+      <xsd:sequence>
+         <xsd:element name="image" type="SingleImageType" maxOccurs="unbounded" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:element name="Vehicleidentifiers" type="ImageType"/>
+   <xsd:element name="Vehicleinteriorsketch2" type="SketchType"/>
+   <xsd:element name="ends" type="SketchType"/>
+   <xsd:element name="Smallcar2doortop" type="SketchType"/>
+   <xsd:element name="Smallcar2doorsides" type="SketchType"/>
+   <xsd:element name="Smallcar2doorends" type="SketchType"/>
+   <xsd:element name="Smallcar4doortop" type="SketchType"/>
+   <xsd:element name="Smallcar4doorsides" type="SketchType"/>
+   <xsd:element name="Smallcar4doorends" type="SketchType"/>
+   <xsd:element name="Smallcarconvertibletop" type="SketchType"/>
+   <xsd:element name="Smallcarconvertiblesides" type="SketchType"/>
+   <xsd:element name="Smallcarconvertibleends" type="SketchType"/>
+   <xsd:element name="Largecartop" type="SketchType"/>
+   <xsd:element name="Largecarsides" type="SketchType"/>
+   <xsd:element name="Largecarends" type="SketchType"/>
+   <xsd:element name="Boxvantop" type="SketchType"/>
+   <xsd:element name="Boxvansides" type="SketchType"/>
+   <xsd:element name="Boxvanends" type="SketchType"/>
+   <xsd:element name="Minivantop" type="SketchType"/>
+   <xsd:element name="Minivansides" type="SketchType"/>
+   <xsd:element name="Minivanends" type="SketchType"/>
+   <xsd:element name="Suv2doortop" type="SketchType"/>
+   <xsd:element name="Suv2doorsides" type="SketchType"/>
+   <xsd:element name="Suv2doorends" type="SketchType"/>
+   <xsd:element name="Suv4doortop" type="SketchType"/>
+   <xsd:element name="Suv4doorsides" type="SketchType"/>
+   <xsd:element name="Suv4doorends" type="SketchType"/>
+   <xsd:element name="Pickup2doortop" type="SketchType"/>
+   <xsd:element name="Pickup2doorsides" type="SketchType"/>
+   <xsd:element name="Pickup2doorends" type="SketchType"/>
+   <xsd:element name="Pickup4doortop" type="SketchType"/>
+   <xsd:element name="Pickup4doorsides" type="SketchType"/>
+   <xsd:element name="Pickup4doorends" type="SketchType"/>
+   <xsd:element name="Pickupextendedcabtop" type="SketchType"/>
+   <xsd:element name="Pickupextendedcabsides" type="SketchType"/>
+   <xsd:element name="Pickupextendedcabends" type="SketchType"/>
+   <xsd:element name="Stationwagontop" type="SketchType"/>
+   <xsd:element name="Stationwagonsides" type="SketchType"/>
+   <xsd:element name="Stationwagonends" type="SketchType"/>
+   <xsd:complexType name="SingleImageType">
+      <xsd:simpleContent>
+			      <xsd:extension base="xsd:int">
+				        <xsd:attribute name="ext" type="xsd:string" use="optional"/>
+				        <xsd:attribute name="desc" type="xsd:string" use="required"/>
+				        <xsd:attribute name="version" type="xsd:string" use="required"/>				
+				        <xsd:attribute name="vehid" type="xsd:string" use="optional"/>
+			      </xsd:extension>
+		    </xsd:simpleContent>
+   </xsd:complexType>
+   <xsd:complexType name="resourceType">
+      <xsd:simpleContent>
+			      <xsd:extension base="xsd:string">
+				        <xsd:attribute name="VehicleNumber" type="xsd:byte" use="required"/>
+				        <xsd:attribute name="value" type="xsd:short" use="required"/>
+			      </xsd:extension>
+		    </xsd:simpleContent>
+   </xsd:complexType>
+   <xsd:complexType name="sceneType">
+      <xsd:simpleContent>
+			      <xsd:extension base="xsd:int">
+				        <xsd:attribute name="type" type="xsd:string" use="required"/>
+				        <xsd:attribute name="desc" type="xsd:string" use="required"/>
+			      </xsd:extension>
+		    </xsd:simpleContent>
+   </xsd:complexType>
+   <xsd:element name="sides" type="SketchType"/>
+   <xsd:element name="top" type="SketchType"/>
+   <xsd:complexType name="SketchType">
+      <xsd:sequence>
+         <xsd:element name="image" type="SketchImageType" maxOccurs="unbounded" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="SketchImageType">
+      <xsd:simpleContent>
+			      <xsd:extension base="xsd:int">
+				        <xsd:attribute name="ext" type="xsd:string" use="optional"/>
+				        <xsd:attribute name="VehicleNumber" type="xsd:int" use="required"/>
+				        <xsd:attribute name="AirbagNumber" type="xsd:int" use="optional"/>
+				        <xsd:attribute name="OccupantNumber" type="xsd:int" use="optional"/>
+			      </xsd:extension>
+		    </xsd:simpleContent>
+   </xsd:complexType>
+</xsd:schema>
