@@ -89,16 +89,28 @@ def xml2dict(xmlobject, duplicate_tags = 'VehicleNumber'):
         return stuff
     
 
-def replace_none(x, replacement=''):
-    "Replace `None` with `replacement`"
-    if x is None:
-        return replacement
-    
-
-
-class XML2Series():
+class XML2Pandas():
     
     def __init__(self, xml_data):
+        """
+        Takes an xml object and parses it to a dictionary in self.data
+        Can return a pandas.Series or pandas.DataFrame object
+        """
         self.xml_data = xml_data
+        self.data = xml2dict(xml_data)
+
+    def to_Series(self):
+        return pd.Series(self.data)
+
+    def to_DataFrame(self, transpose=True):
+        df = pd.DataFrame(self.data)
+        if transpose:
+            return df.T
+        else:
+            return df
+
+    
+    
+        
     
     
