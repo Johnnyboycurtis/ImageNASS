@@ -82,7 +82,7 @@ def xml2dict(xmlobject, duplicate_tags = 'VehicleNumber'):
         return xmlobject.text
     else:
         stuff = dict()
-        for i, child in enumerate(children, 1):
+        for child in children:
             addendum = child.get(duplicate_tags, '')
             key = child.tag + addendum
             stuff[key] = xml2dict(child, duplicate_tags)
