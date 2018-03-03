@@ -8,7 +8,8 @@ The following are intended as simple scripts to extract files for anyone needing
 ## SAS Files
 
 To download and extract SAS files, run
-`bash ExtractNASSFiles.sh`
+
+    bash ExtractNASSFiles.sh
 
 ## XML Files
 
@@ -27,9 +28,11 @@ To work with XML data provided by NASS, `xmlparser` provides some useful scripts
 ## Images
 
 On a terminal, you can run 
+    
     python get_nass_images.py -h
 
 Or, in a script
+    
     import ImageRequests as ir
 
     requester = ir.NASSImageRequest(CaseID='824229459', directory='./Pictures')
