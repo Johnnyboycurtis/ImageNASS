@@ -5,7 +5,36 @@
 
 The following are intended as simple scripts to extract files for anyone needing to utilize the NASS CIREN data sets and images for research.
 
-## Script
+## SAS Files
 
-bash ExtractNASSFiles.sh
+To download and extract SAS files, run
+`bash ExtractNASSFiles.sh`
+
+## XML Files
+
+To work with XML data provided by NASS, `xmlparser` provides some useful scripts to pull XML files and parse them
+
+    import xmlparser as xp
+
+    xmlobject = xp.Example() ## requests an XML file
+
+    case = xp.CaseViewer(xmlobject) 
+    cars = case.get_vehicles() ## get summary vehicle info
+
+    d = xp.xml2dict(cars) ## convert XML to Python dictionary
+    print(d)
+
+## Images
+
+On a terminal, you can run 
+    python get_nass_images.py -h
+
+Or, in a script
+    import ImageRequests as ir
+
+    requester = ir.NASSImageRequest(CaseID='824229459', directory='./Pictures')
+    requester.URL ## to see URLs
+    requester.pull_images()
+
+
 
