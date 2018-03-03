@@ -49,14 +49,46 @@ class CaseViewer():
     def __init__(self, xmlobject, verbose=True):
         self.xmlobject = xmlobject
         self.verbose = verbose
+        self.CaseForm = xmlobject.find('CaseForm')
+        self.EMSForm = xmlobject.find('EMSForm')
+        self.GeneralVehicleForms = xmlobject.find('GeneralVehicleForms')
+        self.IMGForm = xmlobject.find('IMGForm')
+        self.OccupantForms = xmlobject.find('OccupantForms')
+        self.SciCaseForm = xmlobject.find('SciCaseForm')
+        self.SafetyForms = xmlobject.find('SafetyForms')
+        self.VehicleExteriorForms = xmlobject.find('VehicleExteriorForms')
+        self.VehicleInteriorForms = xmlobject.find('VehicleInteriorForms')
     
-    def get_vehicles(self):
-        CaseForm = self.xmlobject.find('CaseForm')
-        Vehicles = CaseForm.find('Vehicles')
+    def get_vehicles(self, as_dict = False):
+        """
+        From Case Form get vehicle data
+        """
+        Vehicles = self.CaseForm.find('Vehicles')
         NumberVehicles = Vehicles.find('NumberVehicles')
         if self.verbose:
             print('Number of Vehicles', NumberVehicles)
+        if as_dict:
+            Vehicles = xml2dict(Vehicles)
         return Vehicles
+    
+    def get_events(self, as_dict = False):
+        """
+        From Case Form get events data
+        """
+        Events = self.CaseForm.find('Events')
+        if as_dict:
+            Events = xml2dict(Events)
+        return Events
+    
+    def get_persons(self, as_dict = False):
+        """
+        From Case Form get persons data
+        """
+        Persons = self.CaseForm.find('Persons')
+        if as_dict:
+            Persons = xml2dict(Persons)
+        return Persons
+        
 
 
 def xml2dict(xmlobject, duplicate_tags = 'VehicleNumber'):
