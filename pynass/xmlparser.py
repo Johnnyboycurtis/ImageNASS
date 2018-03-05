@@ -7,6 +7,7 @@ See example: https://crashviewer.nhtsa.dot.gov/nass-sci/CaseForm.aspx?GetXML&cas
 
 import requests
 from xml.etree import ElementTree
+import pandas as pd
 
 def Example(verbose=False):
     CaseID = '824229459'
@@ -19,7 +20,7 @@ def Example(verbose=False):
 
 def buildURL(CaseID):
     "Takes in CaseID string and returns a URL from which to obtain XML data"
-    url = 'https://crashviewer.nhtsa.dot.gov/nass-sci/CaseForm.aspx?GetXML&caseid={}&year=&transform=0&docInfo=0'.format(CaseID)
+    url = 'https://crashviewer.nhtsa.dot.gov/nass-cds/CaseForm.aspx?GetXML&caseid={}&year=&transform=0&docInfo=0'.format(CaseID)
     return url
 
 def getXML(url):
@@ -131,10 +132,10 @@ class XML2Pandas():
         self.xml_data = xml_data
         self.data = xml2dict(xml_data)
 
-    def to_Series(self):
+    def to_series(self):
         return pd.Series(self.data)
 
-    def to_DataFrame(self, transpose=True):
+    def to_dataframe(self, transpose=True):
         df = pd.DataFrame(self.data)
         if transpose:
             return df.T
