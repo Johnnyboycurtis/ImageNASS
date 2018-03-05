@@ -1,4 +1,4 @@
-import xmlparser as xp
+from pynass import xmlparser as xp
 
 xmlobject = xp.Example()
 case = xp.CaseViewer(xmlobject)

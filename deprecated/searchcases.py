@@ -6,28 +6,31 @@ from sys import platform
 import os
 
 if platform == "linux":
-    CHROMEDRIVER = "./chromedriver"
+    CHROMEDRIVER = "../chromedriver"
 else:
     CHROMEDRIVER = os.environ.get('CHROMEDRIVER', None)
     print("Missing Chrome Driver")
 
 browser = webdriver.Chrome(CHROMEDRIVER)
 
-browser.get('https://www-nass.nhtsa.dot.gov/nass/cds/SearchForm.aspx')
-
+#browser.get('https://www-nass.nhtsa.dot.gov/nass/cds/SearchForm.aspx')
+browser.get('https://crashviewer.nhtsa.dot.gov/LegacyCDS/Search?study=CDS')
 
 ##
 
 #ddlmake = browser.find_element_by_id("ddlMake")
 #browser.find_element_by_xpath("//select[@name='element_name']/option[text()='option_text']").click()
 browser.find_element_by_xpath("//select[@name='ddlMake']/option[text()='HONDA']").click()
-browser.find_element_by_xpath("//select[@name='ddlModel']/option[text()='CIVIC/CRX/DEL SOL']").click()
-browser.find_element_by_xpath("//select[@name='ddlStartModelYear']/option[text()='2000']").click()
+#browser.find_element_by_xpath("//select[@name='ddlModel']/option[text()='CIVIC/CRX/DEL SOL']").click()
+#browser.find_element_by_xpath("//select[@name='ddlStartModelYear']/option[text()='2000']").click()
+browser.find_element_by_xpath("//select[@name='ddlYear']/option[text()='2015']").click()
+browser.find_element_by_xpath("//select[@name='ddlMonth']/option[text()='All']").click()
 ##
 
 
 
-elem = browser.find_element_by_name('SearchImageButtonTop')  # Find the search box
+#elem = browser.find_element_by_name('SearchImageButtonTop')  # Find the search box
+elem = browser.find_element_by_id('btnSubmit')  # Find the search box
 elem.send_keys(Keys.RETURN)
 
 
@@ -104,5 +107,33 @@ while True:
 
 browser.quit()
 
+  
+        
 
+
+if platform == "linux":
+    CHROMEDRIVER = "./chromedriver"
+else:
+    CHROMEDRIVER = os.environ.get('CHROMEDRIVER', None)
+    print("Missing Chrome Driver")
+
+browser = webdriver.Chrome(CHROMEDRIVER)
+
+browser.get('https://www-nass.nhtsa.dot.gov/nass/cds/SearchForm.aspx')
+
+
+##
+
+#ddlmake = browser.find_element_by_id("ddlMake")
+#browser.find_element_by_xpath("//select[@name='element_name']/option[text()='option_text']").click()
+browser.find_element_by_xpath("//select[@name='ddlMake']/option[text()='HONDA']").click()
+browser.find_element_by_xpath("//select[@name='ddlModel']/option[text()='CIVIC/CRX/DEL SOL']").click()
+browser.find_element_by_xpath("//select[@name='ddlStartModelYear']/option[text()='2000']").click()
+browser.find_element_by_xpath("//select[@name='ddlPrimaryDamage']/option[text()='{}']".format(PlaneOfImpact))
+##
+
+
+
+elem = browser.find_element_by_name('SearchImageButtonTop')  # Find the search box
+elem.send_keys(Keys.RETURN)
 
