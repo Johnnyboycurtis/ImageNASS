@@ -33,7 +33,7 @@ On a terminal, you can run
 
 Or, in a script
     
-    import ImageRequests as ir
+    import pynass.imagerequests as ir
 
     requester = ir.NASSImageRequest(CaseID='824229459', directory='./Pictures')
     requester.URL ## to see URLs
