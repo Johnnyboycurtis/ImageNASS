@@ -68,8 +68,53 @@ for caseid, tmp in cases.items():
         car, tmpdata = items
         Contacted = tmpdata.get('Contacted', 'N/A')
         VEHICLE = 'Vehicle#{}'.format(i)
-        _summary[car] = contacted
+        _summary[car] = Contacted
     events[caseid] = _summary
+
+
+
+"""
+## find delta v values ##
+"""
+a,b = tmp.GeneralVehicleForms.findall('GeneralVehicleForm')
+## <GeneralVehicleForm CaseID="923019344" VehicleNumber="1" VehicleID="923675865" CDStype="1">
+list(a.items()) ## basically, a dictionary
+#Out[47]: 
+#[('CaseID', '209018740'),
+# ('VehicleNumber', '1'),
+# ('VehicleID', '209504317'),
+# ('CDStype', '1')]
+
+
+deltav = list()
+for caseid, tmp in cases.items():
+    GenVehicleForm = tmp.GeneralVehicleForms
+    ## for each Case, look at the General Vehicle Forms for each car
+    for tmpdata in GenVehicleForm:
+        VehicleNumber = tmpdata.get('VehicleNumber')
+        DV = tmpdata.find('DeltaV')
+        Event = DV.find('Event')
+        ComputedDV = Event.find('ComputerGeneratedDeltaV') ## get delta v data
+        vehicledv = xp.xml2dict(ComputedDV)
+        vehicledv['VehicleNumber'] = VehicleNumber
+        dvUOM = ComputedDV.find('Total').get('UOM')
+        vehicledv['DeltaVUOM'] =  dvUOM
+        BarrierEquivalentSpeed = Event.find('BarrierEquivalentSpeed')
+        barrier = xp.xml2dict(BarrierEquivalentSpeed)
+        barrierUOM = BarrierEquivalentSpeed.get('UOM')
+        vehicledv['BarrierEquivalentSpeed'] = barrier
+        vehicledv['BarrierUOM'] = barrierUOM
+        vehicledv['CaseID'] = caseid
+        deltav.append(vehicledv)
+
+deltavdf = pd.DataFrame(deltav)
+print(deltavdf.head())
+
+
+
+
+
+
 
 
 
