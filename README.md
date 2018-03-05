@@ -15,7 +15,7 @@ To download and extract SAS files, run
 
 To work with XML data provided by NASS, `xmlparser` provides some useful scripts to pull XML files and parse them
 
-    import xmlparser as xp
+    import pynass.xmlparser as xp
 
     xmlobject = xp.Example() ## requests an XML file
 
@@ -38,6 +38,17 @@ Or, in a script
     requester = ir.NASSImageRequest(CaseID='824229459', directory='./Pictures')
     requester.URL ## to see URLs
     requester.pull_images()
+
+
+## Case Search
+
+To find case numbers, SearchNASS class allows you to specify search parameters available in Case Viewer.
+
+    import pynass.casesearch as cs
+
+    casefinder = cs.SearchNASS('../../chromedriver')
+    results = casefinder.Search(PlaneOfImpact='Front', Year='2015', Month='Jun')
+    print(results)
 
 
 

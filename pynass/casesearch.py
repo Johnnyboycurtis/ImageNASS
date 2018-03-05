@@ -52,7 +52,7 @@ class SearchNASS():
 
 
 
-tmp = SearchNASS()
-results = tmp.Search(PlaneOfImpact='Front', Year='2015', Month='Jun')
-print(results)
+#tmp = SearchNASS()
+#results = tmp.Search(PlaneOfImpact='Front', Year='2015', Month='Jun')
+#print(results)
 
