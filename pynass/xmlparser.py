@@ -23,12 +23,14 @@ def buildURL(CaseID):
     url = 'https://crashviewer.nhtsa.dot.gov/nass-cds/CaseForm.aspx?GetXML&caseid={}&year=&transform=0&docInfo=0'.format(CaseID)
     return url
 
-def getXML(url):
+def getXML(url, verbose=False):
     """
     Uses requests library to pull XML data as string then 
     parses it with xml.etree.ElementTree
     """
     result = requests.get(url)
+    if verbose:
+        print("Request returned")
     xmlresult = ElementTree.fromstring(result.text)
     return xmlresult
 
@@ -47,7 +49,7 @@ def showXMLTree(xmlobject, deep = 3):
 
 class CaseViewer():
     
-    def __init__(self, xmlobject, verbose=True):
+    def __init__(self, xmlobject, verbose=False):
         self.xmlobject = xmlobject
         self.verbose = verbose
         self.CaseForm = xmlobject.find('CaseForm')
