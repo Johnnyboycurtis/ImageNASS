@@ -9,7 +9,7 @@ class SearchNASS():
     def __init__(self, chromedriver='/home/jn107154/Documents/chromedriver'):
 	    self.chromedriver = chromedriver
             
-    def Search(self, PlaneOfImpact, Year, Month, Make='All', Model='All', PlaneSubSection='All'):
+    def Search(self, PlaneOfImpact, Year, MinVeh, MaxVeh, Month='All', Make='All', Model='All', PlaneSubSection='All'):
         browser = webdriver.Chrome(self.chromedriver)
         browser.get('https://crashviewer.nhtsa.dot.gov/LegacyCDS/Search')
         browser.find_element_by_xpath("//select[@name='ddlMake']/option[text()='{}']".format(Make)).click()
@@ -18,6 +18,8 @@ class SearchNASS():
         browser.find_element_by_xpath("//select[@name='lSecondaryDamage']/option[text()='{}']".format(PlaneSubSection)).click()
         browser.find_element_by_xpath("//select[@name='ddlYear']/option[text()='{}']".format(Year)).click()
         browser.find_element_by_xpath("//select[@name='ddlMonth']/option[text()='{}']".format(Month)).click()
+        browser.find_element_by_xpath("//select[@name='ddlMinVeh']/option[text()='{}']".format(MinVeh)).click()
+        browser.find_element_by_xpath("//select[@name='ddlMaxVeh']/option[text()='{}']".format(MaxVeh)).click()
         
         elem = browser.find_element_by_id('btnSubmit')  # Find the search box
         elem.send_keys(Keys.RETURN)
