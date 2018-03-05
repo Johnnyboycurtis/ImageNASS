@@ -9,9 +9,11 @@ class SearchNASS():
     def __init__(self, chromedriver='/home/jn107154/Documents/chromedriver'):
 	    self.chromedriver = chromedriver
             
-    def Search(self, PlaneOfImpact, Year, Month, PlaneSubSection='All'):
+    def Search(self, PlaneOfImpact, Year, Month, Make='All', Model='All', PlaneSubSection='All'):
         browser = webdriver.Chrome(self.chromedriver)
         browser.get('https://crashviewer.nhtsa.dot.gov/LegacyCDS/Search')
+        browser.find_element_by_xpath("//select[@name='ddlMake']/option[text()='{}']".format(Make)).click()
+        browser.find_element_by_xpath("//select[@name='ddlModel']/option[text()='{}']".format(Model)).click()
         browser.find_element_by_xpath("//select[@name='ddlPrimaryDamage']/option[text()='{}']".format(PlaneOfImpact)).click()
         browser.find_element_by_xpath("//select[@name='lSecondaryDamage']/option[text()='{}']".format(PlaneSubSection)).click()
         browser.find_element_by_xpath("//select[@name='ddlYear']/option[text()='{}']".format(Year)).click()
@@ -20,7 +22,7 @@ class SearchNASS():
         elem = browser.find_element_by_id('btnSubmit')  # Find the search box
         elem.send_keys(Keys.RETURN)
 
-        CaseID = []
+        CaseIDResults = dict()
 
         while True:
             html = browser.page_source
@@ -36,23 +38,29 @@ class SearchNASS():
             #print(tr_tags)
             
             for i,x in enumerate(tr_tags):
-                #print(i, x)
-                caseid =  x['href'].split('=')[-1]
-                #print(i, x['href'])
-                CaseID.append(caseid)
-                #print(caseid)
-                #break ## for testing!!
+                href = x['href']
+                caseid =  href.split('=')[-1]
+                CaseIDResults[caseid] = href
+
             try:
                 next_page = browser.find_element_by_id("lNext")
                 next_page.click()
             except selenium.common.exceptions.ElementNotVisibleException:
                 break
                     
-        return CaseID
+        return CaseIDResults
 
 
+def Example():
+    """
+    tmp = SearchNASS()
+    results = tmp.Search(PlaneOfImpact='Front', Year='2015', Month='Jun')
+    return results
+    """
+    tmp = SearchNASS()
+    results = tmp.Search(PlaneOfImpact='Front', Year='2015', Month='Jun')
+    return results
 
-#tmp = SearchNASS()
-#results = tmp.Search(PlaneOfImpact='Front', Year='2015', Month='Jun')
-#print(results)
-
+if __name__ ==  '__main__':
+    results = Example()
+    print(results)
