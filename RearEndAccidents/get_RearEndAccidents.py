@@ -156,3 +156,34 @@ df.to_csv('rear_events.csv', index=False)
 
 
 
+
+
+## get crush profile
+test = cases['839016199']
+exterior = test.VehicleExteriorForms
+exterior1, = exterior.getchildren() 
+vehicle, specifications, fuel, cdc, crush, edr, tire, sketches = exterior1.getchildren()
+
+crushprofile = xp.xml2dict(crush)
+CrushObject = crushprofile.get('CrushObject')
+CrushObject.pop('Measurements')
+pd.Series(CrushObject)
+
+
+CrushProfiles = list()
+for caseid, tmp in cases.items():
+    exterior = tmp.VehicleExteriorForms
+    for exterior1 in exterior:
+        VehicleNumber = exterior1.get('VehicleNumber')
+        crush = exterior1.find('Crush')
+        crushprofile = xp.xml2dict(crush)
+        CrushObject = crushprofile.get('CrushObject')
+        CrushObject['Measurements'] = ''
+        CrushObject['CaseID'] = caseid
+        CrushObject['VehicleNumber'] = VehicleNumber
+        CrushProfiles.append(CrushObject)
+    
+CPDF = pd.DataFrame(CrushProfiles)
+
+CPDF.to_csv('CrushProfiles.csv', index=False)
+

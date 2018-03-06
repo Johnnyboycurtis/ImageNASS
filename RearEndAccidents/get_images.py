@@ -14,7 +14,7 @@ with open('RearEndCases.txt', 'r') as myfile:
 
 requester = ir.NASSImageRequest(CaseID=CaseIDs, directory='/home/jn107154/Pictures/')
 requester.URL ## to see URLs
-requester.pull_images(progress_bar=False)
+requester.pull_images(progress_bar=True)
 
 
 
