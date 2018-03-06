@@ -42,7 +42,7 @@ class NASSImageRequest():
                 source = sesh.get(line).text
                 soup = BeautifulSoup(source, 'lxml')
                 tr_tags = soup.find_all('tr',  style="page-break-after: always")
-                if self.progress_bar:
+                if progress_bar:
                     tr_tags = tqdm(tr_tags)
                 for tag in tr_tags:
                     tag_list = tag.find_all('tr', class_ = 'label') ## get all tag labels
@@ -51,7 +51,8 @@ class NASSImageRequest():
                     img_type = img_type.replace(" - image", "")
                     img_id = img_id.replace(":", "")
                     part_name = part_name.replace(":", "").replace("/", "")
-                    image_name = dir_name + "_".join([img_type, part_name, img_id]) + ".jpg"
+                    image_name = "_".join([img_type, part_name, img_id]) + ".jpg"
+                    image_name = os.path.join(path, image_name)
                     ## next, build the img url
                     img = tag.find('img')
                     url_src = img.get('src')
