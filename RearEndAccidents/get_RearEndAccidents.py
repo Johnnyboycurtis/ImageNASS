@@ -8,6 +8,7 @@ import pynass.casesearch as cs
 import pynass.xmlparser as xp
 import pandas as pd
 import numpy as np
+import pickle
 
 ## get Rear end accidents for 2014-2015
 finder = cs.SearchNASS()
@@ -37,7 +38,14 @@ for caseid in results:
     data = xp.getXML(url, verbose=True)
     tmp = xp.CaseViewer(data)
     cases[caseid] = tmp
-    
+
+with open('cases.pickle', 'wb+') as myfile:
+    pickle.dump(cases, myfile)
+
+
+with open('cases.pickle', 'rb') as myfile:
+    cases = pickle.load(myfile)
+
 
 severity = []
 i = 0
@@ -73,6 +81,31 @@ for caseid, tmp in cases.items():
 
 
 
+def get_vehicle_number(obj, key):
+    "Take in Dictionary"
+    val = obj.get(key)
+    if 'Vehicle' not in val:
+        out =  ''
+    else:
+        out = val[-1]
+    return out
+    
+
+
+Events = []
+for caseid, tmp in cases.items():
+    _events = tmp.get_events()
+    _events = xp.xml2dict(_events)
+    for event, data in _events.items():
+        VehicleNumber = event[-1]
+        data['VehicleNumber'] = VehicleNumber
+        data['ContactedVehicleNumber'] = get_vehicle_number(data, 'Contacted') ## returns Vehicle#2 or 'Tree(> 10 cm in diameter)'
+        data['CaseID'] = caseid
+        Events.append(data)
+
+
+EventsDF = pd.DataFrame(Events)
+
 """
 ## find delta v values ##
 """
@@ -107,14 +140,15 @@ for caseid, tmp in cases.items():
         vehicledv['CaseID'] = caseid
         deltav.append(vehicledv)
 
-deltavdf = pd.DataFrame(deltav)
-print(deltavdf.head())
+DeltavDF = pd.DataFrame(deltav)
+print(DeltavDF.head())
 
 
 
 
+df = pd.merge(left = EventsDF, right = DeltavDF, on = ['CaseID', 'VehicleNumber'], how='right')
 
-
+df.to_csv('rear_events.csv', index=False)
 
 
 
