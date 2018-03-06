@@ -1,7 +1,7 @@
 
 
 import os
-os.chdir('/home/jn107154/Documents/ImageNASS')
+os.chdir('/home/jn107154/Documents/ImageNASS/RearEndAccidents/')
 import sys
 sys.path.append('../')
 import pynass.casesearch as cs
