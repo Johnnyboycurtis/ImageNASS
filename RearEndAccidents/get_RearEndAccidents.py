@@ -70,7 +70,7 @@ dict(zip(*stuff))
 events = dict()
 for caseid, tmp in cases.items():
     _events = tmp.get_events()
-    _events = xp.xml2dict(_events)
+    _events = xp.xml2dict(_events, duplicate_tags='EventNumber')
     _summary = dict()
     for i, items in enumerate(_events.items(), 1):
         car, tmpdata = items
@@ -95,7 +95,7 @@ def get_vehicle_number(obj, key):
 Events = []
 for caseid, tmp in cases.items():
     _events = tmp.get_events()
-    _events = xp.xml2dict(_events)
+    _events = xp.xml2dict(_events, duplicate_tags='EventNumber')
     for event, data in _events.items():
         VehicleNumber = event[-1]
         data['VehicleNumber'] = VehicleNumber
