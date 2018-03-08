@@ -3,4 +3,4 @@ __pycache__/
 *.txt
 *.csv
 *.json
-*.hd5
+*.h5

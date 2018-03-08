@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+## set seed
 np.random.seed(546789)
 
 
@@ -51,7 +52,7 @@ n = df.shape[0]
 
 
 
-ind = np.random.rand(n) < 0.2
+ind = np.random.rand(n) < 0.3
 
 
 traindf = df.loc[ind].reset_index(drop=False)
@@ -87,70 +88,29 @@ Y_train = traindf.loc[:, cols]
 for c in cols:
     Y_train[c] = pd.to_numeric(Y_train[c], errors='coerce').fillna(0)
 
-# dimensions of our images.
-img_width, img_height = 600, 800
 
 
 
+'''
+Load Saved Model
+'''
 
-import keras
-from keras.layers import Conv2D, MaxPooling2D, Input, Dense, Flatten, Dropout, Activation
-from keras.models import Model
+with open('model_dvtotal.json', 'r') as myfile:
+    loaded_model_json = myfile.readlines()[0]
 
-print('building regression model')
-# First, define the vision modules
-digit_input = Input(shape=(600, 800, 3))
-x = Conv2D(32, kernel_size=(6, 6), strides=(3,3))(digit_input)
-x = Activation('relu')(x)
-x = Conv2D(16, kernel_size=(6, 6), strides=(3,3))(x)
-x = Activation('relu')(x)
-x = MaxPooling2D((2, 2))(x)
-x = Flatten()(x)
-#x = Dense(32, activation='relu')(x)
-#x = Dropout(0.5)(x)
-x = Dense(16, activation='relu', kernel_initializer='random_uniform')(x)
-x = Dropout(0.15)(x)
-out = Dense(m, activation='relu', kernel_initializer='random_uniform')(x)
+from keras.models import model_from_json
 
-vision_model = Model(digit_input, out)
-
-# Then define the tell-digits-apart model
-digit_a = Input(shape=(600, 800, 3))
-digit_b = Input(shape=(600, 800, 3))
-digit_c = Input(shape=(600, 800, 3))
-
-# The vision model will be shared, weights and all
-out_a = vision_model(digit_a)
-out_b = vision_model(digit_b)
-out_c = vision_model(digit_c)
-
-# Then concat all three input models
-concatenated = keras.layers.average([out_a, out_b, out_c])
-out = Dense(m, activation='linear')(concatenated)
-
-regression_model = Model([digit_a, digit_b, digit_c], out)
-regression_model.compile(loss='mean_squared_error', optimizer='adam')
+loaded_model = model_from_json(loaded_model_json)
+# load weights into new model
+loaded_model.load_weights("model_dvtotal.h5")
+print("Loaded model from disk")
+ 
+# evaluate loaded model on test data
+loaded_model.compile(loss='mean_squared_error', optimizer='adadelta')
+score = loaded_model.evaluate([pic1, pic2, pic3], Y_train, verbose=1)
+print(score)
+#print("%s: %.2f%%" % (loaded_model.metrics_names[1], score[1]*100))
 
 
-
-print('fitting model')
-regression_model.fit(x=[pic1, pic2, pic3], y = Y_train, batch_size=32, epochs=2, verbose=1, validation_split=0.20)
-## model1.json used 12% of pictures and 40 batch size
-
-
-print('predictions')
-pred = regression_model.predict([pic1[20:24,:,:,:], pic2[20:24,:,:,:], pic3[20:24,:,:,:]], verbose=1)
-print(pred)
-
-
-print('saving model')
-# serialize model to JSON
-model_json = regression_model.to_json()
-with open("model2.json", "w+") as json_file:
-    json_file.write(model_json)
-    
-# serialize weights to HDF5
-regression_model.save_weights("model2.h5")
-print("Saved model to disk")
-
-
+pred = loaded_model.predict([pic1[3,:,:,:], pic2[3,:,:,:], pic3[3,:,:,:]], verbose=1)
+pred = pd.DataFrame(pred, columns = cols)

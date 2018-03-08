@@ -86,7 +86,7 @@ def check_back_bumber(imgname):
         check = w in imgname
         if check:
             break
-    if 'TIRE' in imgname or 'COVER' in imgname or  'SEAT' in imgname:
+    if 'TIRE' in imgname or 'COVER' in imgname or  'SEAT' in imgname or 'CHILD' in imgname or 'RESTRAINT' in imgname or 'BASE' in imgname:
         check = False
     return check
 
