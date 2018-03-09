@@ -51,35 +51,35 @@ n = df.shape[0]
 
 
 
-ind = np.random.rand(n) < 0.25
+ind = np.random.rand(n) < 0.50
 
 
 traindf = df.loc[ind].reset_index(drop=False)
 n_train = traindf.shape[0]
 
 print("Reading in images")
-pic1 = np.zeros(shape=(n_train, 600, 800, 3)).astype('int32')
-pic2 = np.zeros(shape=(n_train, 600, 800, 3)).astype('int32')
-pic3 = np.zeros(shape=(n_train, 600, 800, 3)).astype('int32')
+pic1 = np.zeros(shape=(n_train, 600, 800, 3)) #.astype('int32')
+pic2 = np.zeros(shape=(n_train, 600, 800, 3)) #.astype('int32')
+pic3 = np.zeros(shape=(n_train, 600, 800, 3)) #.astype('int32')
 for i, row in traindf.iterrows():
     ## pic1
     img_path = row['Pic1']
     img = imread(img_path)
-    pic1[i,:,:,:] = img / 255 #.astype('int32')
+    pic1[i,:,:,:] = (img / 255).astype('float32')
     ## pic2
     img_path = row['Pic2']
     img = imread(img_path)
-    pic2[i,:,:,:] = img / 255 #.astype('int32')
+    pic2[i,:,:,:] = (img / 255).astype('float32')
     ## pic3
     img_path = row['Pic3']
     img = imread(img_path)
-    pic3[i,:,:,:] = img / 255 #.astype('int32')
+    pic3[i,:,:,:] = (img / 255).astype('float32')
 
 
 
 
 #cols = 'AVG_C1 + AVG_C2 + AVG_C3 + AVG_C4 + AVG_C5 + AVG_C6 + BarrierEquivalentSpeed +  EnergyAbsorption + Total'.split(' + ')
-cols = 'BarrierEquivalentSpeed + Total'.split(' + ')
+cols = 'Total'.split(' + ')
 
 m = len(cols)
 
@@ -134,23 +134,26 @@ regression_model.compile(loss='mean_squared_error', optimizer='adam')
 
 
 print('fitting model')
-regression_model.fit(x=[pic1, pic2, pic3], y = Y_train, batch_size=32, epochs=6, verbose=1, validation_split=0.20)
+regression_model.fit(x=[pic1, pic2, pic3], y = Y_train, batch_size=32, epochs=25, verbose=1, validation_split=0.20)
 ## model1.json used 12% of pictures and 40 batch size
 
 
 print('predictions')
-pred = regression_model.predict([pic1[20:24,:,:,:], pic2[20:24,:,:,:], pic3[20:24,:,:,:]], verbose=1)
+pred = regression_model.predict([pic1[10:24,:,:,:], pic2[10:24,:,:,:], pic3[10:24,:,:,:]], verbose=1)
 print(pred)
+
+print('actual values')
+print(Y_train.iloc[10:24, :])
 
 
 print('saving model')
 # serialize model to JSON
 model_json = regression_model.to_json()
-with open("model2.json", "w+") as json_file:
+with open("model.json", "w+") as json_file:
     json_file.write(model_json)
     
 # serialize weights to HDF5
-regression_model.save_weights("model2.h5")
+regression_model.save_weights("model.h5")
 print("Saved model to disk")
 
 
