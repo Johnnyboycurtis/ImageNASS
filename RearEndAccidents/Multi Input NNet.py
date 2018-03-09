@@ -51,7 +51,7 @@ n = df.shape[0]
 
 
 
-ind = np.random.rand(n) < 0.2
+ind = np.random.rand(n) < 0.25
 
 
 traindf = df.loc[ind].reset_index(drop=False)
@@ -65,15 +65,15 @@ for i, row in traindf.iterrows():
     ## pic1
     img_path = row['Pic1']
     img = imread(img_path)
-    pic1[i,:,:,:] = img.astype('int32')
+    pic1[i,:,:,:] = img / 255 #.astype('int32')
     ## pic2
     img_path = row['Pic2']
     img = imread(img_path)
-    pic2[i,:,:,:] = img.astype('int32')
+    pic2[i,:,:,:] = img / 255 #.astype('int32')
     ## pic3
     img_path = row['Pic3']
     img = imread(img_path)
-    pic3[i,:,:,:] = img.astype('int32')
+    pic3[i,:,:,:] = img / 255 #.astype('int32')
 
 
 
@@ -106,11 +106,11 @@ x = Conv2D(16, kernel_size=(6, 6), strides=(3,3))(x)
 x = Activation('relu')(x)
 x = MaxPooling2D((2, 2))(x)
 x = Flatten()(x)
-#x = Dense(32, activation='relu')(x)
-#x = Dropout(0.5)(x)
+x = Dense(32, activation='relu')(x)
+x = Dropout(0.5)(x)
 x = Dense(16, activation='relu', kernel_initializer='random_uniform')(x)
 x = Dropout(0.15)(x)
-out = Dense(m, activation='relu', kernel_initializer='random_uniform')(x)
+out = Dense(m, activation='linear', kernel_initializer='random_uniform')(x)
 
 vision_model = Model(digit_input, out)
 
@@ -134,7 +134,7 @@ regression_model.compile(loss='mean_squared_error', optimizer='adam')
 
 
 print('fitting model')
-regression_model.fit(x=[pic1, pic2, pic3], y = Y_train, batch_size=32, epochs=2, verbose=1, validation_split=0.20)
+regression_model.fit(x=[pic1, pic2, pic3], y = Y_train, batch_size=32, epochs=6, verbose=1, validation_split=0.20)
 ## model1.json used 12% of pictures and 40 batch size
 
 
