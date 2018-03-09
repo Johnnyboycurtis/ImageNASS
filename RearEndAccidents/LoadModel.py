@@ -121,23 +121,23 @@ pred = pd.DataFrame(pred, columns = cols)
 
 np.random.seed(5)
 #examples = np.random.randint(0, 792, 3)
-#examples = [372, 447, 775, 420, 206, 701, 118]
+examples = [372, 447, 775, 420, 206, 701, 118]
 for i in examples:
-    fig = plt.figure()
-    img1 = pic1[i]
-    img2 = pic2[i]
-    img3 = pic3[i]
-    plt.subplot(131)
-    plt.imshow(img1)
-    plt.subplot(132)
-    plt.imshow(img2)
-    plt.subplot(133)
-    plt.imshow(img3)
     tmp_pred = pred.loc[i, 'Total']
     tmp_actual = Y_train.loc[i, 'Total']
     title = 'Delta V Actual : {} and Predicted: {}'.format(tmp_actual, str(round(tmp_pred, 3)))
-    fig.suptitle(title, size = 16)
-    #fig.subplots_adjust(top=0.88)
+    fig = plt.figure(figsize=(25,15))
+    img1 = pic1[i]
+    img2 = pic2[i]
+    img3 = pic3[i]
+    plt.subplot(311)
+    plt.imshow(img1)
+    plt.title(title)
+    plt.subplot(312)
+    plt.imshow(img2)
+    plt.subplot(313)
+    plt.imshow(img3)
+    #fig.suptitle(title, size = 16)
     fig.tight_layout()
     plt.savefig('/home/jn107154/Pictures/Results/Example {}.png'.format(i))
     plt.show()
@@ -146,7 +146,7 @@ for i in examples:
 
 ## 372, 447, 775, 420, 206, 701, 118
 
-
+'''
 fig = plt.figure(figsize=(10,30))
 img1 = pic1[i]
 img2 = pic2[i]
@@ -164,4 +164,76 @@ fig.subplots_adjust(top=0.88)
 fig.tight_layout()
 plt.show()
 plt.imsave()
+
+'''
+
+
+
+
+
+testdf = df.loc[~ind].reset_index(drop=False)
+n_test = testdf.shape[0]
+
+Y_test = testdf.loc[:, cols]
+for c in cols:
+    Y_test[c] = pd.to_numeric(Y_test[c], errors='coerce').fillna(0)
+
+
+
+
+print("Reading in images")
+testpic1 = np.zeros(shape=(n_test, 600, 800, 3)) #.astype('int32')
+testpic2 = np.zeros(shape=(n_test, 600, 800, 3)) #.astype('int32')
+testpic3 = np.zeros(shape=(n_test, 600, 800, 3)) #.astype('int32')
+for i, row in traindf.iterrows():
+    ## pic1
+    img_path = row['Pic1']
+    img = imread(img_path)
+    testpic1[i,:,:,:] = (img / 255).astype('float32')
+    ## pic2
+    img_path = row['Pic2']
+    img = imread(img_path)
+    testpic2[i,:,:,:] = (img / 255).astype('float32')
+    ## pic3
+    img_path = row['Pic3']
+    img = imread(img_path)
+    testpic3[i,:,:,:] = (img / 255).astype('float32')
+
+
+
+test_pred = loaded_model.predict([testpic1, testpic2, testpic3], verbose=1)
+test_pred = pd.DataFrame(test_pred, columns = cols)
+Y_test['Predicted Total'] = test_pred['Total']
+Y_test.to_csv('Test_Results.csv', index=False)
+
+
+
+#/home/jn107154/Pictures/Results/TestResults
+
+#examples = np.random.randint(0, 792, 3)
+for i in range(n_test):
+    tmp_pred = test_pred.loc[i, 'Total']
+    tmp_actual = Y_test.loc[i, 'Total']
+    title = 'Delta V Actual : {} and Predicted: {}'.format(tmp_actual, str(round(tmp_pred, 3)))
+    fig = plt.figure(figsize=(25,15))
+    img1 = pic1[i]
+    img2 = pic2[i]
+    img3 = pic3[i]
+    plt.subplot(311)
+    plt.imshow(img1)
+    plt.title(title)
+    plt.subplot(312)
+    plt.imshow(img2)
+    plt.subplot(313)
+    plt.imshow(img3)
+    #fig.suptitle(title, size = 16)
+    fig.tight_layout()
+    plt.savefig('/home/jn107154/Pictures/Results/TestResults/Example {}.png'.format(i))
+    #plt.show()
+    
+
+
+testdf.loc[[26,45]] ## this is a mistake; pictures do not match the CaseID
+#https://crashviewer.nhtsa.dot.gov/nass-cds/CaseForm.aspx?xsl=main.xsl&CaseID=785014352
+#https://crashviewer.nhtsa.dot.gov/nass-cds/CaseForm.aspx?xsl=main.xsl&CaseID=762013184
 
