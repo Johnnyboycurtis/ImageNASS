@@ -185,7 +185,7 @@ print("Reading in images")
 testpic1 = np.zeros(shape=(n_test, 600, 800, 3)) #.astype('int32')
 testpic2 = np.zeros(shape=(n_test, 600, 800, 3)) #.astype('int32')
 testpic3 = np.zeros(shape=(n_test, 600, 800, 3)) #.astype('int32')
-for i, row in traindf.iterrows():
+for i, row in testdf.iterrows():
     ## pic1
     img_path = row['Pic1']
     img = imread(img_path)
@@ -211,14 +211,15 @@ Y_test.to_csv('Test_Results.csv', index=False)
 #/home/jn107154/Pictures/Results/TestResults
 
 #examples = np.random.randint(0, 792, 3)
-for i in range(n_test):
+for i in range(100):
     tmp_pred = test_pred.loc[i, 'Total']
     tmp_actual = Y_test.loc[i, 'Total']
-    title = 'Delta V Actual : {} and Predicted: {}'.format(tmp_actual, str(round(tmp_pred, 3)))
+    CaseID = testdf.loc[i, 'CaseID']
+    title = 'CaseID: {} Delta V Actual : {} and Predicted: {}'.format(CaseID, tmp_actual, str(round(tmp_pred, 3)))
     fig = plt.figure(figsize=(25,15))
-    img1 = pic1[i]
-    img2 = pic2[i]
-    img3 = pic3[i]
+    img1 = testpic1[i]
+    img2 = testpic2[i]
+    img3 = testpic3[i]
     plt.subplot(311)
     plt.imshow(img1)
     plt.title(title)
@@ -229,6 +230,7 @@ for i in range(n_test):
     #fig.suptitle(title, size = 16)
     fig.tight_layout()
     plt.savefig('/home/jn107154/Pictures/Results/TestResults/Example {}.png'.format(i))
+    plt.close()
     #plt.show()
     
 
