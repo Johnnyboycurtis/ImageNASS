@@ -89,7 +89,7 @@ class CrashViewerImageRequest():
             return URL
             
     
-    def get_img_url(self, store=False, return_=False):
+    def get_img_url(self, store=False, return_=False, progress_bar=True):
         '''
         Extract image URLs from XML data. 
         If `store = True`, saves XML data to self.XMLData
@@ -98,7 +98,10 @@ class CrashViewerImageRequest():
         URL = self.URL
         XMLData = dict()
         case_img = dict()
-        for caseid, url in URL.items():
+        URL_items = URL.items()
+        if progress_bar:
+            URL_items = tqdm(URL_items)
+        for caseid, url in URL_items:
             xmlobject = xp.getXML(url)
             if store:
                 XMLData[caseid] = xmlobject
@@ -111,27 +114,50 @@ class CrashViewerImageRequest():
             return case_img
     
     
-    def request_images(self, progress_bar=True):
+    def request_images(self, progress_bar=True, save_results=True, results_file='CrashViewerResults.txt'):
+        '''
+        Request Images
+        '''
         directory = self.directory
+        
+        if save_results:
+            ## save file paths and data for future use
+            results_path = os.path.join(directory, results_file)
+            with open(results_path, 'a+') as outfile:
+                line = '|'.join(['CaseID', 'VehicleNumber', 'Category', 'Description', 'ext', 'img_url', 'image_path'])
+                outfile.write(line + '\n')
+        
         img_url_path = self.img_url_path.values()
-        img_url_path = list(img_url_path)[0]
+        img_url_path = flattenList(list(img_url_path))
+        
         if progress_bar:
             img_url_path = tqdm(img_url_path)
+            
         with requests.Session() as sesh:
             for caseid, vehicle, category, desc, ext, img_url in img_url_path:
                 CaseViewerPath = self.URL[caseid]
-                source = sesh.get(CaseViewerPath)
-                del source
+                source = sesh.get(CaseViewerPath) ## cache the session
+                del source ## delete this as unneccesary
                 ## first make directory
                 path = os.path.join(directory, str(caseid))
                 if not os.path.exists(path):
                     os.makedirs(path)
+                
                 ## create image name
                 image_name = '_'.join([caseid, vehicle, category, desc, ext])
+                image_name = image_name.replace('/', '-')
                 image_path = os.path.join(path, image_name)
                 pull_image = sesh.get(img_url, stream=True)
+                
                 with open(image_path, "wb+") as myfile:
                     myfile.write(pull_image.content)
+                    
+                if save_results:
+                    ## save file paths and data for future use
+                    results_path = os.path.join(directory, results_file)
+                    with open(results_path, 'a+') as outfile:
+                        line = '|'.join([caseid, vehicle, category, desc, ext, img_url, image_path])
+                        outfile.write(line + '\n')
                 
             
         
@@ -147,6 +173,8 @@ def _get_image_paths(xmlobject):
     url_paths = list()
     for v in vehicles:
         ## for each vehicle, get tags
+        vehicle_number = v.get('VehicleNumber')
+        vehicle = '-'.join([v.tag, vehicle_number])
         tags = v.getchildren()
         for t in tags:
             ## for each img angle, e.g. front, back, backleft
@@ -158,7 +186,7 @@ def _get_image_paths(xmlobject):
                 version = i.get('version')
                 imgid = i.text
                 url_ = url_path.format(imgid, CaseID, version)
-                url_paths.append((CaseID, v.tag, t.tag, desc, ext, url_))
+                url_paths.append((CaseID, vehicle, t.tag, desc, ext, url_))
     return url_paths
                     
                     
@@ -166,7 +194,16 @@ def _get_image_paths(xmlobject):
                     
         
         
-        
+def flattenList(data):
+    results = []
+    for rec in data:
+        if isinstance(rec, list):
+            results += rec
+            results = flattenList(results)
+        else:
+            results.append(rec)
+    return results
+
         
             
             
