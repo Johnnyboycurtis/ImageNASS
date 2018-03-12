@@ -13,7 +13,7 @@ from pynass.imagerequests import CrashViewerImageRequest
 
 
 
-test = CrashViewerImageRequest(CaseID = ['114005998'], directory = '/tmp/')
+test = CrashViewerImageRequest(CaseID = ['114005998', '762013184'], directory = '/tmp/')
 
 test.CrashViewerURL()
 print('CaseViewerURL', test.URL)
