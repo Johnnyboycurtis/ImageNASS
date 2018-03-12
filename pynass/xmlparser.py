@@ -9,8 +9,8 @@ import requests
 from xml.etree import ElementTree
 import pandas as pd
 
-def Example(verbose=False):
-    CaseID = '824229459'
+def _Example(verbose=False):
+    CaseID = '114006018'
     url = buildURL(CaseID)
     xmlobject = getXML(url)
     if verbose:
@@ -50,6 +50,9 @@ def showXMLTree(xmlobject, deep = 3):
 class CaseViewer():
     
     def __init__(self, xmlobject, verbose=False):
+        self.CaseID = xmlobject.get('CaseID')
+        self.NumOfVehicle = xmlobject.get('NumOfVehicle')
+        self.CaseStr = xmlobject.get('CaseStr') ## Case Year-PSU-CaseNumber
         self.xmlobject = xmlobject
         self.verbose = verbose
         self.CaseForm = xmlobject.find('CaseForm')

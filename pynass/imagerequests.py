@@ -3,6 +3,7 @@ Requests images from NASS Crash Viewer
 """
 
 import os
+import xmlparser as xp
 import requests
 from bs4 import BeautifulSoup
 from tqdm import tqdm
@@ -64,6 +65,111 @@ class NASSImageRequest():
                         myfile.write(pull_image.content)
 
 
+
+
+class CrashViewerImageRequest():
+    def __init__(self, CaseID, directory):
+        """
+        Builds URLs to images in NHTSA Crash Viewer
+        """
+        self.CaseID = CaseID ## iterable
+        self.directory = directory
+        self.URL = self.CrashViewerURL() ## URL to Case Viewer
+    
+    def CrashViewerURL(self, return_ = False):
+        '''
+        Generate Crash Viewer URL
+        '''
+        URL = dict()
+        for caseid in self.CaseID:
+            url_full = xp.buildURL(caseid)
+            URL[caseid] = url_full
+        self.URL = URL
+        if return_:
+            return URL
+            
+    
+    def get_img_url(self, store=False, return_=False):
+        '''
+        Extract image URLs from XML data. 
+        If `store = True`, saves XML data to self.XMLData
+        If `return_ = True`, returns dict of image URL paths
+        '''
+        URL = self.URL
+        XMLData = dict()
+        case_img = dict()
+        for caseid, url in URL.items():
+            xmlobject = xp.getXML(url)
+            if store:
+                XMLData[caseid] = xmlobject
+            url_paths = _get_image_paths(xmlobject)
+            case_img[caseid] = url_paths
+        self.img_url_path = case_img
+        if store:
+            self.XMLData = XMLData
+        if return_:
+            return case_img
+    
+    
+    def request_images(self, progress_bar=True):
+        directory = self.directory
+        img_url_path = self.img_url_path.values()
+        img_url_path = list(img_url_path)[0]
+        if progress_bar:
+            img_url_path = tqdm(img_url_path)
+        with requests.Session() as sesh:
+            for caseid, vehicle, category, desc, ext, img_url in img_url_path:
+                CaseViewerPath = self.URL[caseid]
+                source = sesh.get(CaseViewerPath)
+                del source
+                ## first make directory
+                path = os.path.join(directory, str(caseid))
+                if not os.path.exists(path):
+                    os.makedirs(path)
+                ## create image name
+                image_name = '_'.join([caseid, vehicle, category, desc, ext])
+                image_path = os.path.join(path, image_name)
+                pull_image = sesh.get(img_url, stream=True)
+                with open(image_path, "wb+") as myfile:
+                    myfile.write(pull_image.content)
+                
+            
+        
+            
+
+
+def _get_image_paths(xmlobject):
+    url_path = 'https://crashviewer.nhtsa.dot.gov/nass-cds/GetBinary.aspx?Image&ImageID={}&CaseID={}&Version={}'
+    CaseViewer = xp.CaseViewer(xmlobject)
+    CaseID = CaseViewer.CaseID
+    imgform = CaseViewer.IMGForm
+    vehicles = imgform.findall('Vehicle')
+    url_paths = list()
+    for v in vehicles:
+        ## for each vehicle, get tags
+        tags = v.getchildren()
+        for t in tags:
+            ## for each img angle, e.g. front, back, backleft
+            images = t.getchildren()
+            for i in images:
+                ## for each image
+                ext = '.' + i.get('ext')
+                desc = i.get('desc')
+                version = i.get('version')
+                imgid = i.text
+                url_ = url_path.format(imgid, CaseID, version)
+                url_paths.append((CaseID, v.tag, t.tag, desc, ext, url_))
+    return url_paths
+                    
+                    
+                    
+                    
+        
+        
+        
+        
+            
+            
 
 
 #https://crashviewer.nhtsa.dot.gov/nass-cds/GetBinary.aspx?Image&ImageID=498459125&CaseID=211017160&Version=1

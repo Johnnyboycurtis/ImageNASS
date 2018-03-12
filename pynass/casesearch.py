@@ -2,8 +2,8 @@ import selenium
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup
-from sys import platform
-import os
+#from sys import platform
+#import os
 
 class SearchNASS():
     def __init__(self, chromedriver='/home/jn107154/Documents/chromedriver'):
@@ -60,7 +60,7 @@ def Example():
     return results
     """
     tmp = SearchNASS()
-    results = tmp.Search(PlaneOfImpact='Front', Year='2015', Month='Jun')
+    results = tmp.Search(PlaneOfImpact='Front', Year='2015', Month='Jan', MinVeh=2, MaxVeh=2)
     return results
 
 if __name__ ==  '__main__':

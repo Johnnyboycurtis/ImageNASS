@@ -1,6 +1,6 @@
 from pynass import xmlparser as xp
 
-xmlobject = xp.Example()
+xmlobject = xp._Example()
 case = xp.CaseViewer(xmlobject)
 
 cars = case.get_vehicles()
