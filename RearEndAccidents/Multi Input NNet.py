@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 
-np.random.seed(546789)
+np.random.seed(123546789)
 
 
 def update_names(imgpath):
@@ -45,7 +45,7 @@ print('Number of Records', n)
 
 
 
-ind = np.random.rand(n) < 0.10
+ind = np.random.rand(n) < 0.105
 
 
 traindf = df.loc[ind].reset_index(drop=False)
@@ -129,7 +129,7 @@ regression_model.compile(loss='mean_squared_error', optimizer='adam')
 
 
 print('fitting model')
-regression_model.fit(x=[pic1, pic2, pic3], y = Y_train, batch_size=32, epochs=10, verbose=1, validation_split=0.20)
+regression_model.fit(x=[pic1, pic2, pic3], y = Y_train, batch_size=32, epochs=20, verbose=1, validation_split=0.20)
 ## model1.json used 12% of pictures and 40 batch size
 
 
