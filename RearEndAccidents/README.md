@@ -20,6 +20,7 @@ Steps:
 
 
 Current Progress
+
     Epoch 1/10
     2098/2098 [==============================] - 205s 98ms/step - loss: 197.4529 - val_loss: 136.2317
     Epoch 2/10
