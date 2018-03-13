@@ -86,8 +86,10 @@ def check_back_bumber(imgname):
         check = w in imgname
         if check:
             break
-    if 'TIRE' in imgname or 'COVER' in imgname or  'SEAT' in imgname or 'CHILD' in imgname or 'RESTRAINT' in imgname or 'BASE' in imgname:
-        check = False
+    not_needed = ['TIRE', 'COVER', 'SEAT', 'CHILD', 'RESTRAINT', 'INTERIOR', 'BASE']
+    for tag in not_needed:
+        if tag in imgname:
+            check = False
     return check
 
 
@@ -95,8 +97,8 @@ def check_back_bumber(imgname):
 filenames = dict()
 
 for caseid, car in vehicle_struck_dict.items():
-    vehicle_num = 'Vehicle {}'.format(car)
-    files = glob('/home/jn107154/Pictures/{}/*{}*.jpg'.format(caseid, vehicle_num))
+    vehicle_num = 'Vehicle-{}'.format(car)
+    files = glob('/home/jn107154/Pictures/NASS/{}/*{}*.jpg'.format(caseid, vehicle_num))
     data = []
     for imgname in files:
         check = check_back_bumber(imgname)
