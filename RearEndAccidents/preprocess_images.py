@@ -12,8 +12,8 @@ InputDF = pd.read_csv('InputDF.csv', dtype=str)
 
 
 
-tmp = imread(fname = '/home/jn107154/Pictures/126013662/resized/Vehicle 2_back_Image ID 687161496.jpg')
-plt.imshow(tmp)
+#tmp = imread(fname = '/home/jn107154/Pictures/126013662/resized/Vehicle 2_back_Image ID 687161496.jpg')
+#plt.imshow(tmp)
 
 
 #resizetest = imresize(tmp, size=(600, 800, 3))
@@ -27,7 +27,7 @@ jpgfiles = list(set(jpgfiles))
 
 
 
-pictures = '/home/jn107154/Pictures'
+pictures = '/home/jn107154/Pictures/NASS'
 for fname in tqdm(jpgfiles):
     ## build path name
     img_name = fname.split('/')[-1]
@@ -59,6 +59,8 @@ def update_names(imgpath):
 back_end_ = pd.read_csv("Back_End.csv", dtype=str)
 back_end_.head()
 
+
+'''
 df = pd.merge(left=back_end_, right = InputDF, on = 'CaseID')
 df['Pic1'] = df['Pic1'].map(update_names)
 df['Pic2'] = df['Pic2'].map(update_names)
@@ -71,3 +73,4 @@ for i, row in df.iterrows():
     img = imread(img_path)
     pic1[i,:,:,:] = img
 
+'''

@@ -1,3 +1,4 @@
+import sys
 import os
 os.chdir('/home/jn107154/Documents/ImageNASS/RearEndAccidents')
 from scipy.ndimage import imread
@@ -5,12 +6,13 @@ from scipy.misc import imresize, imsave
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from tqdm import tqdm
 
 np.random.seed(546789)
 
 
 def update_names(imgpath):
-    pictures = '/home/jn107154/Pictures'
+    pictures = '/home/jn107154/Pictures/NASS/'
     img_name = imgpath.split('/')[-1]
     caseid = imgpath.split('/')[-2]
     new_path = os.path.join(pictures, caseid, 'resized', img_name)
@@ -36,22 +38,14 @@ df['Pic1'] = df['Pic1'].map(update_names)
 df['Pic2'] = df['Pic2'].map(update_names)
 df['Pic3'] = df['Pic3'].map(update_names)
 
-def search_child_seat(imgname):
-    imgname = imgname.upper()
-    if 'CHILD' in imgname or 'RESTRAINT' in imgname:
-        return True
-    else:
-        return False
-
-nochild = ~df.apply(lambda row: search_child_seat(row['Pic1']) or search_child_seat(row['Pic2']) or search_child_seat(row['Pic3']), axis=1)
-
 ind = ~df.Total.isnull().values
-df = df.loc[ind & nochild]
+df = df.loc[ind]
 n = df.shape[0]
+print('Number of Records', n)
 
 
 
-ind = np.random.rand(n) < 0.50
+ind = np.random.rand(n) < 0.10
 
 
 traindf = df.loc[ind].reset_index(drop=False)
@@ -61,7 +55,8 @@ print("Reading in images")
 pic1 = np.zeros(shape=(n_train, 600, 800, 3)) #.astype('int32')
 pic2 = np.zeros(shape=(n_train, 600, 800, 3)) #.astype('int32')
 pic3 = np.zeros(shape=(n_train, 600, 800, 3)) #.astype('int32')
-for i, row in traindf.iterrows():
+Rows = traindf.iterrows()
+for i, row in tqdm(Rows):
     ## pic1
     img_path = row['Pic1']
     img = imread(img_path)
@@ -134,7 +129,7 @@ regression_model.compile(loss='mean_squared_error', optimizer='adam')
 
 
 print('fitting model')
-regression_model.fit(x=[pic1, pic2, pic3], y = Y_train, batch_size=32, epochs=25, verbose=1, validation_split=0.20)
+regression_model.fit(x=[pic1, pic2, pic3], y = Y_train, batch_size=32, epochs=10, verbose=1, validation_split=0.20)
 ## model1.json used 12% of pictures and 40 batch size
 
 
@@ -146,14 +141,14 @@ print('actual values')
 print(Y_train.iloc[10:24, :])
 
 
+sys.exit(0)
+
 print('saving model')
 # serialize model to JSON
 model_json = regression_model.to_json()
-with open("model.json", "w+") as json_file:
+with open("model_new.json", "w+") as json_file:
     json_file.write(model_json)
     
 # serialize weights to HDF5
-regression_model.save_weights("model.h5")
+regression_model.save_weights("model_new.h5")
 print("Saved model to disk")
-
-

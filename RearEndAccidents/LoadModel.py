@@ -11,7 +11,7 @@ np.random.seed(546789)
 
 
 def update_names(imgpath):
-    pictures = '/home/jn107154/Pictures'
+    pictures = '/home/jn107154/Pictures/NASS'
     img_name = imgpath.split('/')[-1]
     caseid = imgpath.split('/')[-2]
     new_path = os.path.join(pictures, caseid, 'resized', img_name)
@@ -37,17 +37,8 @@ df['Pic1'] = df['Pic1'].map(update_names)
 df['Pic2'] = df['Pic2'].map(update_names)
 df['Pic3'] = df['Pic3'].map(update_names)
 
-def search_child_seat(imgname):
-    imgname = imgname.upper()
-    if 'CHILD' in imgname or 'RESTRAINT' in imgname:
-        return True
-    else:
-        return False
-
-nochild = ~df.apply(lambda row: search_child_seat(row['Pic1']) or search_child_seat(row['Pic2']) or search_child_seat(row['Pic3']), axis=1)
-
 ind = ~df.Total.isnull().values
-df = df.loc[ind & nochild]
+df = df.loc[ind]
 n = df.shape[0]
 
 
@@ -95,17 +86,23 @@ for c in cols:
 Load Saved Model
 '''
 
-with open('model.json', 'r') as myfile:
+with open('model_new.json', 'r') as myfile:
     loaded_model_json = myfile.readlines()[0]
 
 from keras.models import model_from_json
 
 loaded_model = model_from_json(loaded_model_json)
 # load weights into new model
-loaded_model.load_weights("model.h5")
+loaded_model.load_weights("model_new.h5")
 print("Loaded model from disk")
 
-# evaluate loaded model on test data
+
+
+
+
+'''
+Evaluate loaded model on test data
+'''
 loaded_model.compile(loss='mean_squared_error', optimizer='adadelta')
 score = loaded_model.evaluate([pic1, pic2, pic3], Y_train, verbose=1)
 print(score)
@@ -171,7 +168,7 @@ plt.imsave()
 
 
 
-testdf = df.loc[~ind].reset_index(drop=False)
+testdf = df.loc[~ind].reset_index(drop=False).loc[:100]
 n_test = testdf.shape[0]
 
 Y_test = testdf.loc[:, cols]
@@ -198,7 +195,6 @@ for i, row in testdf.iterrows():
     img_path = row['Pic3']
     img = imread(img_path)
     testpic3[i,:,:,:] = (img / 255).astype('float32')
-
 
 
 test_pred = loaded_model.predict([testpic1, testpic2, testpic3], verbose=1)
@@ -229,7 +225,7 @@ for i in range(100):
     plt.imshow(img3)
     #fig.suptitle(title, size = 16)
     fig.tight_layout()
-    plt.savefig('/home/jn107154/Pictures/Results/TestResults/Example {}.png'.format(i))
+    plt.savefig('/home/jn107154/Pictures/NASS/Results/TestResults/Example {}.png'.format(i))
     plt.close()
     #plt.show()
     
