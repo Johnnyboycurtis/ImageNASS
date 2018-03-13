@@ -15,7 +15,7 @@ finder = cs.SearchNASS()
 
 results = []
 for year in [2010, 2011, 2012, 2013, 2014, 2015]:
-    tmp = finder.Search(PlaneOfImpact='Back (Rear)', Year = year, MinVeh=2, MaxVeh=2, Make = 'HONDA')
+    tmp = finder.Search(PlaneOfImpact='Back (Rear)', Year = year, MinVeh=2, MaxVeh=2)
     ## tmp is a dictionary, but I only want/need the caseid not the links
     results += tmp
 
