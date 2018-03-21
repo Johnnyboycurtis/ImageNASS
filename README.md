@@ -39,6 +39,18 @@ Or, in a script
     requester.URL ## to see URLs
     requester.pull_images()
 
+### New API
+
+    CaseID = [775015542, 835017523]
+
+    import pynass.imagerequests as ir
+
+    requester = ir.CrashViewerImageRequest(directory='/tmp/nass')
+    requester.CrashViewerURL() ## build case viewer URL
+    requester.get_img_url() ## get image URLs
+    requester.request_images() ## download images
+
+
 
 ## Case Search
 
