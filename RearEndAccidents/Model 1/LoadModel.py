@@ -49,6 +49,7 @@ for c in cols:
 '''
 Load Saved Model
 '''
+import keras
 
 with open('model-1.json', 'r') as myfile:
     loaded_model_json = myfile.readlines()[0]
@@ -67,10 +68,10 @@ print("Loaded model from disk")
 '''
 Evaluate loaded model on test data
 '''
-loaded_model.compile(loss='mean_squared_error', optimizer='adadelta')
+Adam = keras.optimizers.Adam(lr=0.0005, beta_1=0.95, beta_2=0.999, epsilon=0.00001, decay=0.00001, amsgrad=False)
+loaded_model.compile(loss='mean_squared_error', optimizer=Adam)
 score = loaded_model.evaluate([pic1, pic2], Y_train, verbose=1)
 print('train loss', score)
-#print("%s: %.2f%%" % (loaded_model.metrics_names[1], score[1]*100))
 
 
 pred = loaded_model.predict([pic1, pic2], verbose=1)
