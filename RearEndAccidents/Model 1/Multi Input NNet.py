@@ -62,9 +62,9 @@ Adam = keras.optimizers.Adam(lr=0.0005, beta_1=0.95, beta_2=0.999, epsilon=0.000
 print('building regression model')
 # First, define the vision modules
 digit_input = Input(shape=(600, 800, 3))
-x = Conv2D(32, kernel_size=(3, 3), strides=(2,2))(digit_input)
+x = Conv2D(32, kernel_size=(3, 3), strides=(2,2), padding = 'same')(digit_input)
 x = Activation('relu')(x)
-x = Conv2D(16, kernel_size=(3, 3), strides=(2,2))(x) ## change back to 16 -- test loss 125.296244898
+x = Conv2D(16, kernel_size=(3, 3), strides=(2,2), padding = 'same')(x) ## change back to 16 -- test loss 98.401790
 x = Activation('relu')(x)
 x = MaxPooling2D((2, 2))(x)
 x = Flatten()(x)
@@ -94,7 +94,7 @@ regression_model.compile(loss='mean_squared_error', optimizer=Adam)
 
 
 print('fitting model')
-regression_model.fit(x=[pic1, pic2], y = Y_train, batch_size=32, epochs=100, verbose=1, validation_split=0.05)
+regression_model.fit(x=[pic1, pic2], y = Y_train, batch_size=32, epochs=30, verbose=1, validation_split=0.05)
 ## model1.json used 12% of pictures and 40 batch size
 
 
