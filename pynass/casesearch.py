@@ -21,7 +21,7 @@ class SearchNASS():
         browser.find_element_by_xpath("//select[@name='ddlMinVeh']/option[text()='{}']".format(MinVeh)).click()
         browser.find_element_by_xpath("//select[@name='ddlMaxVeh']/option[text()='{}']".format(MaxVeh)).click()
         
-        elem = browser.find_element_by_id('btnSubmit')  # Find the search box
+        elem = browser.find_element_by_id('btnSubmit1')  # Find the search box
         elem.send_keys(Keys.RETURN)
 
         CaseIDResults = dict()
