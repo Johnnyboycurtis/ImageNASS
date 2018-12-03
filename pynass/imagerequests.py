@@ -7,6 +7,8 @@ import xmlparser as xp
 import requests
 from bs4 import BeautifulSoup
 from tqdm import tqdm
+from joblib import Parallel, delayed
+
 
 
 class NASSImageRequest():
@@ -63,6 +65,7 @@ class NASSImageRequest():
                     pull_image = sesh.get(img_url, stream=True)
                     with open(image_name, "wb+") as myfile:
                         myfile.write(pull_image.content)
+
 
 
 
@@ -158,10 +161,63 @@ class CrashViewerImageRequest():
                     with open(results_path, 'a+') as outfile:
                         line = '|'.join([caseid, vehicle, category, desc, ext, img_url, image_path])
                         outfile.write(line + '\n')
-                
-            
+
+
+    def parallel_images(self, progress_bar=True, save_results=True, results_file='CrashViewerResults.txt'):
+        '''
+        PARALLEL Request Images
+        '''
+        directory = self.directory
         
+        
+        if save_results:
+            ## save file paths and data for future use
+            results_path = os.path.join(directory, results_file)
+            with open(results_path, 'a+') as outfile:
+                line = '|'.join(['CaseID', 'VehicleNumber', 'Category', 'Description', 'ext', 'img_url', 'image_path'])
+                outfile.write(line + '\n')
+        
+        img_url_path = self.img_url_path.values()
+        img_url_path = flattenList(list(img_url_path))
+        img_url_path = [list(args) for args in img_url_path]
+        
+        Args = []
+        
+        URLDict = self.URL
+        for line in img_url_path:
+            line.append(directory)
+            line.append(URLDict)
+            line.append(results_file)
+            Args.append(line)
+        
+        Parallel(n_jobs=4)(delayed(multi_run_wrapper)(args) for args in Args)
+                
+
+
+
+def multi_run_wrapper(args):
+       return _myfun(*args)
             
+def _myfun(caseid, vehicle, category, desc, ext, img_url, directory, URLDict, results_file=None):
+    with requests.Session() as sesh:
+        CaseViewerPath = URLDict[caseid] ## url dict
+        source = sesh.get(CaseViewerPath) ## cache the session
+        del source ## delete this as unneccesary
+        ## first make directory
+        path = os.path.join(directory, str(caseid))
+        if not os.path.exists(path):
+            os.makedirs(path)
+        
+        ## create image name
+        image_name = '_'.join([caseid, vehicle, category, desc, ext])
+        image_name = image_name.replace('/', '-')
+        image_path = os.path.join(path, image_name)
+        pull_image = sesh.get(img_url, stream=True)
+        
+        with open(image_path, "wb+") as myfile:
+            myfile.write(pull_image.content)
+
+                
 
 
 def _get_image_paths(xmlobject):
