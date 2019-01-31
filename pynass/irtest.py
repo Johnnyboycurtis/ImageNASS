@@ -12,6 +12,7 @@ import pynass.xmlparser as xp
 import requests
 from bs4 import BeautifulSoup
 from tqdm import tqdm
+import xmlparser as xp
 
 class CrashViewerImageRequest():
     def __init__(self, CaseID, directory, XMLData=None):
@@ -61,7 +62,11 @@ class CrashViewerImageRequest():
         if progress_bar:
             URL_items = tqdm(URL_items)
         for caseid, url in URL_items:
-            xmlobject = XMLData[caseid]
+            if self.XMLData == None:
+                xmlobject = xp.getXML(url)
+                xmlobject = xp.CaseViewer(xmlobject)
+            else:
+                xmlobject = XMLData[caseid]
             url_paths = _get_image_paths(xmlobject)
             case_img[caseid] = url_paths
         self.img_url_path = case_img
