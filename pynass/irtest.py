@@ -78,46 +78,60 @@ class CrashViewerImageRequest():
         '''
         Request Images
         '''
-        directory = self.directory
-        
-        if save_results:
-            ## save file paths and data for future use
-            results_path = os.path.join(directory, results_file)
-            with open(results_path, 'a+') as outfile:
-                line = '|'.join(['CaseID', 'VehicleNumber', 'Category', 'Description', 'ext', 'img_url', 'image_path'])
-                outfile.write(line + '\n')
-        
-        img_url_path = self.img_url_path.values()
-        img_url_path = flattenList(list(img_url_path))
-        
-        if progress_bar:
-            img_url_path = tqdm(img_url_path)
+        for caseid in self.CaseID:
+            MainURL = self.URL[caseid]
+            case_images = self.get_img_url(return_=True, progress_bar=False) # returns dictionary
             
-        with requests.Session() as sesh:
-            for caseid, vehicle, category, desc, ext, img_url in img_url_path:
-                CaseViewerPath = self.URL[caseid]
-                source = sesh.get(CaseViewerPath) ## cache the session
-                del source ## delete this as unneccesary
-                ## first make directory
-                path = os.path.join(directory, str(caseid))
-                if not os.path.exists(path):
-                    os.makedirs(path)
+            data = []
+            cols = ['CaseID', 'VehicleNumber', 'Category', 'Description', 'ext', 'img_url']
+            for CaseID, _images in case_images.items():
+                _images = list(_images)
+                data.extend(_images)
+
+            df = pd.DataFrame(data, columns = cols)
+            df['VehicleNumber'] = df['VehicleNumber'].map(lambda x: x.split('-')[-1])
+
+            download_images(MainURL=MainURL, img_info_df=df, directory=self.directory, results_file=results_file)
+
+
+
+
+
+
+def download_images(MainURL, img_info_df, directory, results_file='CrashViewerResults.txt'):
+    ## save file paths and data for future use
+    with requests.Session() as sesh:
+        for _, data in img_info_df.iterrows():
+            caseid, vehicle, category, desc, ext, img_url = data
+            CaseViewerPath = MainURL[caseid]
+            #print("Main Path", CaseViewerPath)
+            #print("Current URL", img_url)
+            source = sesh.get(CaseViewerPath) ## cache the session
+            del source ## delete this as unneccesary
+            ## first make directory
+            path = os.path.join(directory, str(caseid))
+            if not os.path.exists(path):
+                os.makedirs(path)
+            
+            ## create image name
+            image_name = '_'.join([caseid, vehicle, category, desc, ext])
+            image_name = image_name.replace('/', '-')
+            image_path = os.path.join(path, image_name)
+            pull_image = sesh.get(img_url, stream=True)
+            
+            with open(image_path, "wb+") as myfile:
+                myfile.write(pull_image.content)
                 
-                ## create image name
-                image_name = '_'.join([caseid, vehicle, category, desc, ext])
-                image_name = image_name.replace('/', '-')
-                image_path = os.path.join(path, image_name)
-                pull_image = sesh.get(img_url, stream=True)
-                
-                with open(image_path, "wb+") as myfile:
-                    myfile.write(pull_image.content)
-                    
-                if save_results:
-                    ## save file paths and data for future use
-                    results_path = os.path.join(directory, results_file)
-                    with open(results_path, 'a+') as outfile:
-                        line = '|'.join([caseid, vehicle, category, desc, ext, img_url, image_path])
-                        outfile.write(line + '\n')
+            if results_file:
+                ## save file paths and data for future use
+                results_path = os.path.join(directory, caseid, results_file)
+                with open(results_path, 'a+') as outfile:
+                    line = '|'.join(['CaseID', 'VehicleNumber', 'Category', 'Description', 'ext', 'img_url', 'image_path'])
+                    outfile.write(line + '\n')
+                    line = '|'.join([caseid, vehicle, category, desc, ext, img_url, image_path])
+                    outfile.write(line + '\n')
+
+
 
 
 
