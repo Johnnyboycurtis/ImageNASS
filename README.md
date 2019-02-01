@@ -17,13 +17,27 @@ To work with XML data provided by NASS, `xmlparser` provides some useful scripts
 
     import pynass.xmlparser as xp
 
-    xmlobject = xp.Example() ## requests an XML file
+    xmlobject = xp._Example() ## requests an XML file
 
     case = xp.CaseViewer(xmlobject) 
     cars = case.get_vehicles() ## get summary vehicle info
 
     d = xp.xml2dict(cars) ## convert XML to Python dictionary
     print(d)
+
+    {'NumberVehicles': '2',
+    'VehicleSum1': {'Year': '1998',
+    'Make': 'DODGE',
+    'Model': 'STRATUS',
+    'DamagePlane': 'Front',
+    'Severity': 'Moderate',
+    'ComponentFailure': 'none'},
+    'VehicleSum2': {'Year': '1997',
+    'Make': 'CHRYSLER',
+    'Model': 'LHS',
+    'DamagePlane': 'Left',
+    'Severity': 'Moderate',
+    'ComponentFailure': 'none'}}
 
 ## Images
 
@@ -41,14 +55,16 @@ Or, in a script
 
 ### New API
 
-    CaseID = [775015542, 835017523]
-
     import pynass.imagerequests as ir
 
-    requester = ir.CrashViewerImageRequest(directory='/tmp/nass')
-    requester.CrashViewerURL() ## build case viewer URL
-    requester.get_img_url() ## get image URLs
-    requester.request_images() ## download images
+    CaseIDList = ['208017535', '141017241', '208017555', '208018415'] # NASS case ID list
+
+    # construct requesting object
+    requester = ir.CrashViewerImageRequest(CaseID = CaseIDList, directory='./Pictures', XMLData=None)
+    # obtain all case URL sites
+    requester.CrashViewerURL()
+    # download images
+    requester.request_images()
 
 
 
