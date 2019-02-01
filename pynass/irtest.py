@@ -24,7 +24,8 @@ class CrashViewerImageRequest():
         self.directory = directory
         self.URL = self.CrashViewerURL() ## URL to Case Viewer
         self.XMLData = XMLData
-    
+
+
     def CrashViewerURL(self, return_ = False):
         '''
         Generate Crash Viewer URL
@@ -50,48 +51,42 @@ class CrashViewerImageRequest():
         if return_:
             return XMLData
     
-    def get_img_url(self, return_=False, progress_bar=True):
+    def get_img_url(self, CaseID):
         '''
         Extract image URLs from XML data. 
         If `store = True`, saves XML data to self.XMLData
         If `return_ = True`, returns dict of image URL paths
         '''
-        URL = self.URL
+        URL = self.URL[CaseID] # main case url
         XMLData = self.XMLData
-        case_img = dict()
-        URL_items = URL.items()
-        if progress_bar:
-            URL_items = tqdm(URL_items)
-        for caseid, url in URL_items:
-            if self.XMLData == None:
-                xmlobject = xp.getXML(url)
-                xmlobject = xp.CaseViewer(xmlobject)
-            else:
-                xmlobject = XMLData[caseid]
-            url_paths = _get_image_paths(xmlobject)
-            case_img[caseid] = url_paths
-        self.img_url_path = case_img
-        if return_:
-            return case_img
+        if self.XMLData == None:
+            xmlobject = xp.getXML(URL)
+            xmlobject = xp.CaseViewer(xmlobject)
+        else:
+            xmlobject = XMLData[CaseID]
+        url_paths = _get_image_paths(xmlobject)
+        return url_paths
     
     
-    def request_images(self, progress_bar=True, save_results=True, results_file='CrashViewerResults.txt'):
+    def request_images(self, progress_bar=False, save_results=True, results_file='CrashViewerResults.txt'):
         '''
         Request Images
         '''
-        for caseid in self.CaseID:
-            MainURL = self.URL[caseid]
-            case_images = self.get_img_url(return_=True, progress_bar=False) # returns dictionary
+        if progress_bar:
+            CaseIDList = tqdm(self.CaseID)
+        else:
+            CaseIDList = self.CaseID
+        for caseid in CaseIDList:
+            case_images = self.get_img_url(CaseID = caseid) # returns dictionary
             
-            data = []
             cols = ['CaseID', 'VehicleNumber', 'Category', 'Description', 'ext', 'img_url']
-            for CaseID, _images in case_images.items():
-                _images = list(_images)
-                data.extend(_images)
 
-            df = pd.DataFrame(data, columns = cols)
+            df = pd.DataFrame(case_images, columns = cols)
             df['VehicleNumber'] = df['VehicleNumber'].map(lambda x: x.split('-')[-1])
+            df['image_number'] = df.index.values # add image number to be used as image file name
+            df['image_number'] = df['image_number'].apply(lambda x: str(x).rjust(3, '0'))
 
+            MainURL = self.URL[caseid]
             download_images(MainURL=MainURL, img_info_df=df, directory=self.directory, results_file=results_file)
 
 
@@ -102,8 +97,8 @@ class CrashViewerImageRequest():
 def download_images(MainURL, img_info_df, directory, results_file='CrashViewerResults.txt'):
     ## save file paths and data for future use
     with requests.Session() as sesh:
-        for _, data in img_info_df.iterrows():
-            caseid, vehicle, category, desc, ext, img_url = data
+        for _, data in tqdm(img_info_df.iterrows()):
+            caseid, vehicle, category, desc, ext, img_url, image_number = data
             CaseViewerPath = MainURL
             #print("Main Path", CaseViewerPath)
             #print("Current URL", img_url)
@@ -115,8 +110,7 @@ def download_images(MainURL, img_info_df, directory, results_file='CrashViewerRe
                 os.makedirs(path)
             
             ## create image name
-            image_name = '_'.join([caseid, vehicle, category, desc, ext])
-            image_name = image_name.replace('/', '-')
+            image_name = 'image_{}{}'.format(image_number, ext) # using image number + extension as file name
             image_path = os.path.join(path, image_name)
             pull_image = sesh.get(img_url, stream=True)
             
@@ -129,7 +123,7 @@ def download_images(MainURL, img_info_df, directory, results_file='CrashViewerRe
                 with open(results_path, 'a+') as outfile:
                     line = '|'.join(['CaseID', 'VehicleNumber', 'Category', 'Description', 'ext', 'img_url', 'image_path'])
                     outfile.write(line + '\n')
-                    line = '|'.join([caseid, vehicle, category, desc, ext, img_url, image_path])
+                    line = '|'.join([caseid, vehicle, category, desc, ext, img_url, image_number, image_path])
                     outfile.write(line + '\n')
 
 
