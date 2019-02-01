@@ -3,11 +3,11 @@ Requests images from NASS Crash Viewer
 """
 
 import os
-import xmlparser as xp
 import requests
 from bs4 import BeautifulSoup
 from tqdm import tqdm
-from joblib import Parallel, delayed
+import xmlparser as xp # pynass module
+import pandas as pd
 
 
 
