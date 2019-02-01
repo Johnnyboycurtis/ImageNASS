@@ -69,16 +69,17 @@ class NASSImageRequest():
 
 
 
-
 class CrashViewerImageRequest():
-    def __init__(self, CaseID, directory):
+    def __init__(self, CaseID, directory, XMLData=None):
         """
         Builds URLs to images in NHTSA Crash Viewer
         """
         self.CaseID = CaseID ## iterable
         self.directory = directory
         self.URL = self.CrashViewerURL() ## URL to Case Viewer
-    
+        self.XMLData = XMLData
+
+
     def CrashViewerURL(self, return_ = False):
         '''
         Generate Crash Viewer URL
@@ -90,139 +91,109 @@ class CrashViewerImageRequest():
         self.URL = URL
         if return_:
             return URL
-            
     
-    def get_img_url(self, store=False, return_=False, progress_bar=True):
-        '''
-        Extract image URLs from XML data. 
-        If `store = True`, saves XML data to self.XMLData
-        If `return_ = True`, returns dict of image URL paths
-        '''
+    def get_xml(self, return_=False, progress_bar=True):
         URL = self.URL
         XMLData = dict()
-        case_img = dict()
         URL_items = URL.items()
         if progress_bar:
             URL_items = tqdm(URL_items)
         for caseid, url in URL_items:
             xmlobject = xp.getXML(url)
-            if store:
-                XMLData[caseid] = xmlobject
-            url_paths = _get_image_paths(xmlobject)
-            case_img[caseid] = url_paths
-        self.img_url_path = case_img
-        if store:
-            self.XMLData = XMLData
+            XMLData[caseid] = xmlobject
+        self.XMLData = XMLData
         if return_:
-            return case_img
+            return XMLData
+    
+    def get_img_url(self, CaseID):
+        '''
+        Extract image URLs from XML data. 
+        If `store = True`, saves XML data to self.XMLData
+        If `return_ = True`, returns dict of image URL paths
+        '''
+        URL = self.URL[CaseID] # main case url
+        XMLData = self.XMLData
+        if self.XMLData == None:
+            xmlobject = xp.getXML(URL)
+            xmlobject = xp.CaseViewer(xmlobject)
+        else:
+            xmlobject = XMLData[CaseID]
+        url_paths = _get_image_paths(xmlobject)
+        return url_paths
     
     
-    def request_images(self, progress_bar=True, save_results=True, results_file='CrashViewerResults.txt'):
+    def request_images(self, progress_bar=False, save_results=True, results_file='CrashViewerResults.txt'):
         '''
         Request Images
         '''
-        directory = self.directory
-        
-        if save_results:
-            ## save file paths and data for future use
-            results_path = os.path.join(directory, results_file)
-            with open(results_path, 'a+') as outfile:
-                line = '|'.join(['CaseID', 'VehicleNumber', 'Category', 'Description', 'ext', 'img_url', 'image_path'])
-                outfile.write(line + '\n')
-        
-        img_url_path = self.img_url_path.values()
-        img_url_path = flattenList(list(img_url_path))
-        
         if progress_bar:
-            img_url_path = tqdm(img_url_path)
+            CaseIDList = tqdm(self.CaseID)
+        else:
+            CaseIDList = self.CaseID
+        for caseid in CaseIDList:
+            case_images = self.get_img_url(CaseID = caseid) # returns dictionary
             
-        with requests.Session() as sesh:
-            for caseid, vehicle, category, desc, ext, img_url in img_url_path:
-                CaseViewerPath = self.URL[caseid]
-                source = sesh.get(CaseViewerPath) ## cache the session
-                del source ## delete this as unneccesary
-                ## first make directory
-                path = os.path.join(directory, str(caseid))
-                if not os.path.exists(path):
-                    os.makedirs(path)
-                
-                ## create image name
-                image_name = '_'.join([caseid, vehicle, category, desc, ext])
-                image_name = image_name.replace('/', '-')
-                image_path = os.path.join(path, image_name)
-                pull_image = sesh.get(img_url, stream=True)
-                
-                with open(image_path, "wb+") as myfile:
-                    myfile.write(pull_image.content)
-                    
-                if save_results:
-                    ## save file paths and data for future use
-                    results_path = os.path.join(directory, results_file)
-                    with open(results_path, 'a+') as outfile:
-                        line = '|'.join([caseid, vehicle, category, desc, ext, img_url, image_path])
-                        outfile.write(line + '\n')
+            cols = ['CaseID', 'VehicleNumber', 'Category', 'Description', 'ext', 'img_url']
 
+            df = pd.DataFrame(case_images, columns = cols)
+            df['VehicleNumber'] = df['VehicleNumber'].map(lambda x: x.split('-')[-1])
+            df['image_number'] = df.index.values # add image number to be used as image file name
+            df['image_number'] = df['image_number'].apply(lambda x: str(x).rjust(3, '0'))
 
-    def parallel_images(self, progress_bar=True, save_results=True, results_file='CrashViewerResults.txt'):
-        '''
-        PARALLEL Request Images
-        '''
-        directory = self.directory
-        
-        
-        if save_results:
-            ## save file paths and data for future use
-            results_path = os.path.join(directory, results_file)
-            with open(results_path, 'a+') as outfile:
-                line = '|'.join(['CaseID', 'VehicleNumber', 'Category', 'Description', 'ext', 'img_url', 'image_path'])
-                outfile.write(line + '\n')
-        
-        img_url_path = self.img_url_path.values()
-        img_url_path = flattenList(list(img_url_path))
-        img_url_path = [list(args) for args in img_url_path]
-        
-        Args = []
-        
-        URLDict = self.URL
-        for line in img_url_path:
-            line.append(directory)
-            line.append(URLDict)
-            line.append(results_file)
-            Args.append(line)
-        
-        Parallel(n_jobs=4)(delayed(multi_run_wrapper)(args) for args in Args)
-                
+            MainURL = self.URL[caseid]
+            download_images(MainURL=MainURL, img_info_df=df, directory=self.directory, results_file=results_file)
 
 
 
-def multi_run_wrapper(args):
-       return _myfun(*args)
-            
-def _myfun(caseid, vehicle, category, desc, ext, img_url, directory, URLDict, results_file=None):
+
+
+
+def download_images(MainURL, img_info_df, directory, results_file='CrashViewerResults.txt'):
+    ## save file paths and data for future use
     with requests.Session() as sesh:
-        CaseViewerPath = URLDict[caseid] ## url dict
-        source = sesh.get(CaseViewerPath) ## cache the session
-        del source ## delete this as unneccesary
-        ## first make directory
-        path = os.path.join(directory, str(caseid))
-        if not os.path.exists(path):
-            os.makedirs(path)
-        
-        ## create image name
-        image_name = '_'.join([caseid, vehicle, category, desc, ext])
-        image_name = image_name.replace('/', '-')
-        image_path = os.path.join(path, image_name)
-        pull_image = sesh.get(img_url, stream=True)
-        
-        with open(image_path, "wb+") as myfile:
-            myfile.write(pull_image.content)
-
+        for _, data in tqdm(img_info_df.iterrows()):
+            caseid, vehicle, category, desc, ext, img_url, image_number = data
+            CaseViewerPath = MainURL
+            #print("Main Path", CaseViewerPath)
+            #print("Current URL", img_url)
+            source = sesh.get(CaseViewerPath) ## cache the session
+            del source ## delete this as unneccesary
+            ## first make directory
+            path = os.path.join(directory, str(caseid))
+            if not os.path.exists(path):
+                os.makedirs(path)
+            
+            ## create image name
+            image_name = 'image_{}{}'.format(image_number, ext) # using image number + extension as file name
+            image_path = os.path.join(path, image_name)
+            pull_image = sesh.get(img_url, stream=True)
+            
+            with open(image_path, "wb+") as myfile:
+                myfile.write(pull_image.content)
                 
+            if results_file:
+                ## save file paths and data for future use
+                results_path = os.path.join(directory, caseid, results_file)
+                with open(results_path, 'a+') as outfile:
+                    line = '|'.join(['CaseID', 'VehicleNumber', 'Category', 'Description', 'ext', 'img_url', 'image_path'])
+                    outfile.write(line + '\n')
+                    line = '|'.join([caseid, vehicle, category, desc, ext, img_url, image_number, image_path])
+                    outfile.write(line + '\n')
+
+
+
 
 
 def _get_image_paths(xmlobject):
+    '''
+    Takes in an XML object and converts it to pynass.xmlparser.CaseViewer
+    then it searches for image urls
+    '''
     url_path = 'https://crashviewer.nhtsa.dot.gov/nass-cds/GetBinary.aspx?Image&ImageID={}&CaseID={}&Version={}'
-    CaseViewer = xp.CaseViewer(xmlobject)
+    if not isinstance(xmlobject, xp.CaseViewer):
+        CaseViewer = xp.CaseViewer(xmlobject)
+    else:
+        CaseViewer = xmlobject
     CaseID = CaseViewer.CaseID
     imgform = CaseViewer.IMGForm
     vehicles = imgform.findall('Vehicle')
@@ -259,10 +230,6 @@ def flattenList(data):
         else:
             results.append(rec)
     return results
-
-        
-            
-            
 
 
 #https://crashviewer.nhtsa.dot.gov/nass-cds/GetBinary.aspx?Image&ImageID=498459125&CaseID=211017160&Version=1
