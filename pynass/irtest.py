@@ -13,6 +13,7 @@ import requests
 from bs4 import BeautifulSoup
 from tqdm import tqdm
 import xmlparser as xp
+import pandas as pd
 
 class CrashViewerImageRequest():
     def __init__(self, CaseID, directory, XMLData=None):
@@ -103,7 +104,7 @@ def download_images(MainURL, img_info_df, directory, results_file='CrashViewerRe
     with requests.Session() as sesh:
         for _, data in img_info_df.iterrows():
             caseid, vehicle, category, desc, ext, img_url = data
-            CaseViewerPath = MainURL[caseid]
+            CaseViewerPath = MainURL
             #print("Main Path", CaseViewerPath)
             #print("Current URL", img_url)
             source = sesh.get(CaseViewerPath) ## cache the session
