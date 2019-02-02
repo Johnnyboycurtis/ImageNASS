@@ -49,19 +49,11 @@ To work with XML data provided by NASS, `xmlparser` provides some useful scripts
 
 ## Images
 
-On a terminal, you can run 
+On a system terminal, you can run 
     
     python get_nass_images.py -h
 
-Or, in a script
-    
-    import pynass.imagerequests as ir
-
-    requester = ir.NASSImageRequest(CaseID='824229459', directory='./Pictures')
-    requester.URL ## to see URLs
-    requester.pull_images()
-
-### New API
+Or, in a Python script
 
     import pynass.imagerequests as ir
 
