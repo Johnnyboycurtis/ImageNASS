@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 #import os
 
 class SearchNASS():
-    def __init__(self, chromedriver='/home/jn107154/Documents/chromedriver'):
+    def __init__(self, chromedriver='./chromedriver'):
 	    self.chromedriver = chromedriver
             
     def Search(self, PlaneOfImpact, Year, MinVeh, MaxVeh, Month='All', Make='All', Model='All', PlaneSubSection='All'):
