@@ -23,15 +23,16 @@ def buildURL(CaseID):
     url = 'https://crashviewer.nhtsa.dot.gov/nass-cds/CaseForm.aspx?GetXML&caseid={}&year=&transform=0&docInfo=0'.format(CaseID)
     return url
 
-def getXML(url, verbose=False):
+def getXML(url, raw=False):
     """
     Uses requests library to pull XML data as string then 
     parses it with xml.etree.ElementTree
     """
     result = requests.get(url)
-    if verbose:
-        print("Request returned")
-    xmlresult = ElementTree.fromstring(result.text)
+    if raw:
+        xmlresult = result.text
+    else:
+        xmlresult = ElementTree.fromstring(result.text)
     return xmlresult
 
 def showXMLTree(xmlobject, deep = 3):
