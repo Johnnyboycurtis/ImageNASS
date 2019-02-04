@@ -1,8 +1,8 @@
 # ImageNASS
 
-The following are intended as simple scripts to extract files for anyone needing to utilize the [NASS CDS Crash Viewer](https://crashviewer.nhtsa.dot.gov/LegacyCDS/Search) data sets and images for research.
+The following project intends to provide simple to use API and scripts to extract files for anyone needing to utilize the [NASS CDS Crash Viewer](https://crashviewer.nhtsa.dot.gov/LegacyCDS/Search) data sets and images for research.
 
-## About Crashworthiness Data System
+## About Crashworthiness Data System (CDS)
 
 > The Crash Investigation Sampling System (CISS) has detailed data on a nationally representative sample of thousands of passenger vehicle crashes. Trained Crash Technicians collect information from crash sites, vehicles, victims, and medical records. CISS data is used by government, industry, academia, and other stakeholders to analyze crashes and injuries.
 
@@ -70,6 +70,8 @@ Or, in a Python script
 
 ## Case Search
 
+## API
+
 To find case numbers, SearchNASS class allows you to specify search parameters available in Case Viewer.
 
     import pynass.casesearch as cs
@@ -79,4 +81,6 @@ To find case numbers, SearchNASS class allows you to specify search parameters a
     print(results)
 
 
+### ChromeDriver
 
+The `pynass.casesearch` module utilizes chromedriver. Other drivers are available to use, however, those were not implemented in this project. A custom script will be needed to utilze another driver. You can find the [ChromeDriver](http://chromedriver.chromium.org) provided by the Chromium Project.
