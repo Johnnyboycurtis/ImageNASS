@@ -92,8 +92,10 @@ class CrashViewerImageRequest():
 
 def download_images(MainURL, img_info_df, directory, results_file='CrashViewerResults.txt'):
     ## save file paths and data for future use
+    img_names = list()
+    img_locations = list()
     with requests.Session() as sesh:
-        for _, data in tqdm(img_info_df.iterrows()):
+        for _, data in img_info_df.iterrows():
             caseid, vehicle, category, desc, ext, img_url, image_number = data
             CaseViewerPath = MainURL
             #print("Main Path", CaseViewerPath)
@@ -112,15 +114,16 @@ def download_images(MainURL, img_info_df, directory, results_file='CrashViewerRe
             
             with open(image_path, "wb+") as myfile:
                 myfile.write(pull_image.content)
+                img_names.append(image_name)
+                img_locations.append(image_path)
                 
-            if results_file:
-                ## save file paths and data for future use
-                results_path = os.path.join(directory, caseid, results_file)
-                with open(results_path, 'a+') as outfile:
-                    line = '|'.join(['CaseID', 'VehicleNumber', 'Category', 'Description', 'ext', 'img_url', 'image_path'])
-                    outfile.write(line + '\n')
-                    line = '|'.join([caseid, vehicle, category, desc, ext, img_url, image_number, image_path])
-                    outfile.write(line + '\n')
+    if results_file and img_info_df.shape[0] > 0:
+        ## save file paths and data for future use
+        img_info_df['names'] = img_names
+        img_info_df['locations'] = img_locations
+
+        outfile = os.path.join(path, results_file)
+        img_info_df.to_csv(outfile, index=False)
 
 
 
